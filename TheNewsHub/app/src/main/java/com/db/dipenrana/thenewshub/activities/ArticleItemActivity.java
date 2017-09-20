@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.db.dipenrana.thenewshub.R;
 
-public class ArticleItem extends AppCompatActivity {
+public class ArticleItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
