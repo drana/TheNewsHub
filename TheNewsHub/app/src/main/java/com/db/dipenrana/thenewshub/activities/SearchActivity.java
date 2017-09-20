@@ -92,15 +92,16 @@ public class SearchActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call call, final Response response) throws IOException {
                                                 Log.d("response","Got response");
-                                                String responseData = response.body().string();
+                                                //String responseData = response.body().string();
                                                 JSONObject jsonResponse = null;
                                                 try {
-                                                    jsonResponse = new JSONObject(responseData);
+                                                    jsonResponse = new JSONObject(response.body().string());
                                                     JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
-                                                    articles= Article.parseJsonArray(resultsArray.toString());
-                                                    Log.d("response","response bacl");
+                                                    articles.addAll(Article.parseJsonArray(resultsArray.toString()));
+                                                    Log.d("response","got array list of articles");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
+                                                    Log.d("response","Failed to get array list of articles");
                                                 }
                                                 if (!response.isSuccessful()) {
                                                     throw new IOException("Unexpected code " + response);
