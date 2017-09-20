@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TheNewsHub</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="btntxtSearch">Search</string>
 </resources>
