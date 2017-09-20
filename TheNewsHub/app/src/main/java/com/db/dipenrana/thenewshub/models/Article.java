@@ -1,8 +1,12 @@
 package com.db.dipenrana.thenewshub.models;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -330,5 +334,20 @@ public class Article {
     //</editor-fold>
 
 
+    public static ArrayList<Article> parseJsonArray(String responseData) {
+        ArrayList<Article> articles = new ArrayList<Article>();
+
+        try {
+            Gson gson = new GsonBuilder().create();
+            Article[] articleArray = gson.fromJson(responseData, Article[].class);
+            articles = new ArrayList<Article>(Arrays.asList(articleArray));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return articles;
+    }
 
 }
