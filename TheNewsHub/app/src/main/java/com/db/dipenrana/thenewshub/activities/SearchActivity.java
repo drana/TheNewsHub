@@ -10,8 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.db.dipenrana.thenewshub.R;
+import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.utils.NetworkUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,10 +90,15 @@ public class SearchActivity extends AppCompatActivity {
                                             public void onResponse(Call call, final Response response) throws IOException {
                                                 Log.d("response","Got response");
                                                 String responseData = response.body().string();
+
                                                 JSONObject json = null;
                                                 try {
                                                     json = new JSONObject(responseData);
-                                                     //owner[0] = json.getString("titile");
+                                                    //owner[0] = json.getString("response");
+                                                    //JSONArray results = json.getJSONObject("response").getJSONArray("docs");
+                                                    JSONArray results = json.getJSONObject("response").getJSONArray("docs");
+                                                    parseJson(results.toString());
+                                                    Log.d("response","response bacl");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -103,7 +112,19 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-     public String getQueryURL(String query){
+    private void parseJson(String responseData) {
+        try {
+            Gson gson = new GsonBuilder().create();
+            Article[] articles = gson.fromJson(responseData, Article[].class);
+            int temp = 0;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public String getQueryURL(String query){
 
         //build url with params
         HttpUrl.Builder urlBuilder = HttpUrl.parse(NetworkUtils.API_URL).newBuilder();
