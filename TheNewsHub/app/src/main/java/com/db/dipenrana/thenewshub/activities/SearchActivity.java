@@ -1,11 +1,14 @@
 package com.db.dipenrana.thenewshub.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
 import com.db.dipenrana.thenewshub.models.Article;
+import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
 import com.db.dipenrana.thenewshub.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.etQuery) EditText etSearchQuery;
     @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
+    @BindView(R.id.webviewArticleDetails) WebView wvArticleDetails;
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
@@ -134,6 +139,25 @@ public class SearchActivity extends AppCompatActivity {
 
         Log.d("Connect", "Got response from NYT");
 
+    }
+
+    private void setupListViewListener() {
+
+        ItemClickSupport.addTo(rvArticleItems).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        // do it
+                        // first parameter is the context, second is the class of the activity to launch
+                        Article details = articles.get(position);
+                        Intent intent = new Intent(SearchActivity.this,Article.class);
+                        intent.putExtra("ARTICLE_DETAIL", details );
+                        //intent.putExtra("Genres", (Parcelable) details.getGenreList());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 
 //    private void parseJson(String responseData) {

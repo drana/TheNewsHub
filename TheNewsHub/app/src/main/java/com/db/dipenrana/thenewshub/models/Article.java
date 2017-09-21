@@ -1,5 +1,8 @@
 package com.db.dipenrana.thenewshub.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -13,7 +16,7 @@ import java.util.List;
  * Created by dipenrana on 9/19/17.
  */
 
-public class Article {
+public class Article implements Parcelable{
 
     @SerializedName("web_url")
     @Expose
@@ -64,6 +67,34 @@ public class Article {
     @Expose
     private String uri;
 
+
+    protected Article(Parcel in) {
+        webUrl = in.readString();
+        snippet = in.readString();
+        documentType = in.readString();
+        typeOfMaterial = in.readString();
+        id = in.readString();
+        wordCount = in.readInt();
+        score = in.readFloat();
+        printPage = in.readString();
+        source = in.readString();
+        pubDate = in.readString();
+        newDesk = in.readString();
+        sectionName = in.readString();
+        uri = in.readString();
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 
     //<editor-fold Description"Getters & Setters">
     public String getWebUrl() {
@@ -193,6 +224,28 @@ public class Article {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(webUrl);
+        parcel.writeString(snippet);
+        parcel.writeString(documentType);
+        parcel.writeString(typeOfMaterial);
+        parcel.writeString(id);
+        parcel.writeInt(wordCount);
+        parcel.writeFloat(score);
+        parcel.writeString(printPage);
+        parcel.writeString(source);
+        parcel.writeString(pubDate);
+        parcel.writeString(newDesk);
+        parcel.writeString(sectionName);
+        parcel.writeString(uri);
     }
 
     public class Headline {
