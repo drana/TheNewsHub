@@ -2,6 +2,7 @@ package com.db.dipenrana.thenewshub.adapters;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.activities.ArticleItemNoImage;
 import com.db.dipenrana.thenewshub.activities.ArticleItemWithImage;
 import com.db.dipenrana.thenewshub.models.Article;
+import com.db.dipenrana.thenewshub.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,11 +72,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         switch (holder.getItemViewType()) {
             case Image:
                 ArticleItemWithImage vh1 = (ArticleItemWithImage) holder;
-                //BindItemWithImage(vh1,position);
-                //configurePosterAcitivity(vh1, position);
+                BindItemWithImage(vh1,position);
                 break;
             case NoImage:
                 ArticleItemNoImage vh2 = (ArticleItemNoImage) holder;
+                BindItemWithNoImage(vh2,position);
                 //configureLandscapeActivity(vh2, position);
                 break;
             default:
@@ -82,11 +84,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 //configureDefaultViewHolder(vh, position);
                 break;
         }
-
-    }
-
-    //populating data into item
-    public void Bind(final Article article){
 
     }
 
@@ -128,33 +125,45 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
 
-//    private void BindItemWithImage(ArticleItemWithImage holder, int position) {
-//        // Get the data model based on position
-//        Article article = mArticles.get(position);
-//
-//        //TextView tvArticleTitle = holder;
-//        tvTitle.setText(movie.getOriginalTitle());
-//        TextView tvInfo = holder.getTvInfo();
-//        tvInfo.setText(movie.getOverview());
-//        ImageView ivImage = holder.getIvPosterImage();
-//        ivImage.setImageResource(0);
-//
-//        int orientation = mContext.getResources().getConfiguration().orientation;
-//        if(orientation == Configuration.ORIENTATION_PORTRAIT){
-//            imgURL = movie.getPosterPath();
-//        }else {
-//            imgURL = movie.getBackdropPath();
-//        }
-//
-//        Picasso.with(mContext)
-//                .load(imgURL)
-//                .fit()
-//                .centerCrop()
-//                .placeholder(R.drawable.posterplaceholder)
-//                .error(R.drawable.postererror)
-//                .noFade()
-//                .transform(new RoundedCornersTransformation(10, 10))
-//                .into(holder.getIvPosterImage());
-//    }
+    private void BindItemWithImage(ArticleItemWithImage holder, int position) {
+        // Get the data model based on position
+        Article article = mArticles.get(position);
+        TextView tvTitle = holder.getTvArticleTitile();
+        TextView tvNewsDesk = holder.getTvNewsDesk();
+        TextView tvSnippet = holder.getTvArticleSnippet();
+        ImageView ivArticleImage = holder.getIvArticleImage();
+        ivArticleImage.setImageResource(0);
+
+        String imgURL = NetworkUtils.IMAGE_URL_PREFIX + article.getMultimedia().get(0).getUrl();
+
+        Picasso.with(mContext)
+                .load(imgURL)
+                .fit()
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .noFade()
+                .transform(new RoundedCornersTransformation(10, 10))
+                .into(ivArticleImage);
+
+        tvTitle.setText(article.getHeadline().getMain());
+        tvNewsDesk.setText(article.getNewDesk());
+        tvSnippet.setText(article.getSnippet());
+    }
+
+
+    private void BindItemWithNoImage(ArticleItemNoImage holder, int position) {
+
+        // Get the data model based on position
+        Article article = mArticles.get(position);
+        TextView tvTitle = holder.getTvArticleTitile();
+        TextView tvNewsDesk = holder.getTvNewsDesk();
+        TextView tvSnippet = holder.getTvArticleSnippet();
+
+        tvTitle.setText(article.getHeadline().getMain());
+        tvNewsDesk.setText(article.getNewDesk());
+        tvSnippet.setText(article.getSnippet());
+
+    }
 
 }

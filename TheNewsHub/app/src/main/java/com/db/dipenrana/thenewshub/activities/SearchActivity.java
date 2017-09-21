@@ -2,6 +2,7 @@ package com.db.dipenrana.thenewshub.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.db.dipenrana.thenewshub.R;
+import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
 import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.utils.NetworkUtils;
 import com.google.gson.Gson;
@@ -41,7 +43,13 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
 
+    //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
+
+    //define adapter and recycle view
+    ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
+    RecyclerView rvArticleItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,14 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+        //instance of adapter
+        articleRecyclerViewAdapter = new ArticleRecyclerViewAdapter(this,articles);
+        rvArticleItems = findViewById(R.id.rvResults);
+
+        //attach adapter to view
+        rvArticleItems.setAdapter(articleRecyclerViewAdapter);
+        rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
 
 
 
@@ -99,7 +115,13 @@ public class SearchActivity extends AppCompatActivity {
                                                     JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
                                                     articles.addAll(Article.parseJsonArray(resultsArray.toString()));
 
-                                                    Log.d("response","got array list of articles");
+                                                    SearchActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            articleRecyclerViewAdapter.notifyDataSetChanged();
+                                                        }
+                                                    });
+                                                            Log.d("response","got array list of articles");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                     Log.d("response","Failed to get array list of articles");

@@ -16,6 +16,18 @@ import butterknife.ButterKnife;
 
 public class ArticleItemNoImage extends RecyclerView.ViewHolder{
 
+    public TextView getTvArticleTitile() {
+        return tvArticleTitile;
+    }
+
+    public TextView getTvNewsDesk() {
+        return tvNewsDesk;
+    }
+
+    public TextView getTvArticleSnippet() {
+        return tvArticleSnippet;
+    }
+
     @BindView(R.id.tvArticleTitlePlain)TextView tvArticleTitile;
     @BindView(R.id.tvNewsDeskPlain) TextView tvNewsDesk;
     @BindView(R.id.tvArticleSnippetPlain) TextView tvArticleSnippet;
@@ -24,6 +36,6 @@ public class ArticleItemNoImage extends RecyclerView.ViewHolder{
     public ArticleItemNoImage(View itemView) {
         super(itemView);
 
-        ButterKnife.bind(itemView);
+        ButterKnife.bind(this,itemView);
     }
 }
