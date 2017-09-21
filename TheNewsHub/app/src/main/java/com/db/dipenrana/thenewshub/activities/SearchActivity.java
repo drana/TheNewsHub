@@ -7,11 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.etQuery) EditText etSearchQuery;
     @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
-
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
@@ -62,10 +62,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        //bind view
         ButterKnife.bind(this);
+
+        //set toolbar as actionbar for this activity
+        setSupportActionBar(toolbar);
 
         //instance of adapter
         articleRecyclerViewAdapter = new ArticleRecyclerViewAdapter(this,articles);
@@ -77,18 +78,19 @@ public class SearchActivity extends AppCompatActivity {
 
         SetupListViewCLickListener();
 
-
-
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_article_activity,menu);
+        return true;
+    }
 
     @OnClick(R.id.btnSearch)
     public void onClickSearch(){
         Log.d("Button","Search Button clicked");
         String query = etSearchQuery.getText().toString();
 
-        //Toast.makeText(this, query,Toast.LENGTH_LONG).show();
         try {
             ConnectHttpClient(query);
         } catch (IOException e) {

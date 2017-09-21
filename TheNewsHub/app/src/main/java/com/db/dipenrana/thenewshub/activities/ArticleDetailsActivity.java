@@ -40,6 +40,8 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         wvArticleDetails.getSettings().setJavaScriptEnabled(true);
         wvArticleDetails.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wvArticleDetails.setWebViewClient(new ArticleBrowser());
+        // Enable responsive layout
+        wvArticleDetails.getSettings().setUseWideViewPort(true);
         wvArticleDetails.loadUrl(webURL);
     }
 
