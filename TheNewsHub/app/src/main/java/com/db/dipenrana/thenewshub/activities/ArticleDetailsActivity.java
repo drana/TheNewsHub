@@ -1,6 +1,7 @@
 package com.db.dipenrana.thenewshub.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,11 +18,15 @@ import butterknife.ButterKnife;
 public class ArticleDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.wvArticleDetails) WebView wvArticleDetails;
+    String webURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_details);
+
+        Intent intent = getIntent();
+        webURL = intent.getStringExtra("ARTICLE_WEB_URL");
 
         ButterKnife.bind(this);
 
@@ -35,7 +40,7 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         wvArticleDetails.getSettings().setJavaScriptEnabled(true);
         wvArticleDetails.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wvArticleDetails.setWebViewClient(new ArticleBrowser());
-        wvArticleDetails.loadUrl("http://www.example.com");
+        wvArticleDetails.loadUrl(webURL);
     }
 
     //manage url loading behaviour

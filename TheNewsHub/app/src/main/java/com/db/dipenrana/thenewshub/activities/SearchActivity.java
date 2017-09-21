@@ -75,6 +75,7 @@ public class SearchActivity extends AppCompatActivity {
         rvArticleItems.setAdapter(articleRecyclerViewAdapter);
         rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
 
+        SetupListViewCLickListener();
 
 
 
@@ -146,7 +147,7 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void setupListViewListener() {
+    private void SetupListViewCLickListener() {
 
         ItemClickSupport.addTo(rvArticleItems).setOnItemClickListener(
                 new ItemClickSupport.OnItemClickListener() {
@@ -155,8 +156,8 @@ public class SearchActivity extends AppCompatActivity {
                         // do it
                         // first parameter is the context, second is the class of the activity to launch
                         Article details = articles.get(position);
-                        Intent intent = new Intent(SearchActivity.this,Article.class);
-                        intent.putExtra("ARTICLE_DETAIL", details );
+                        Intent intent = new Intent(SearchActivity.this,ArticleDetailsActivity.class);
+                        intent.putExtra("ARTICLE_WEB_URL", details.getWebUrl());
                         //intent.putExtra("Genres", (Parcelable) details.getGenreList());
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
