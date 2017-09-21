@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.etQuery) EditText etSearchQuery;
     @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
-    @BindView(R.id.webviewArticleDetails) WebView wvArticleDetails;
+
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
@@ -54,6 +54,8 @@ public class SearchActivity extends AppCompatActivity {
     //define adapter and recycle view
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
     RecyclerView rvArticleItems;
+
+
 
 
     @Override
@@ -75,7 +77,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
+
     }
+
+
 
     @OnClick(R.id.btnSearch)
     public void onClickSearch(){
