@@ -98,6 +98,7 @@ public class SearchActivity extends AppCompatActivity {
                                                     jsonResponse = new JSONObject(response.body().string());
                                                     JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
                                                     articles.addAll(Article.parseJsonArray(resultsArray.toString()));
+
                                                     Log.d("response","got array list of articles");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
