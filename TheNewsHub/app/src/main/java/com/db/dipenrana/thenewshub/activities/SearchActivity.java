@@ -175,7 +175,7 @@ public class SearchActivity extends AppCompatActivity {
     private void ConnectHttpClient(String query4client) throws IOException {
 
         // filter url
-         String queryURL = getQueryURL(query4client);
+        String queryURL = getQueryURL(query4client);
         final String[] owner = new String[1];
         // should be a singleton
         OkHttpClient client = new OkHttpClient();

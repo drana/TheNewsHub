@@ -11,10 +11,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by dipenrana on 9/20/17.
+ * Created by dipenrana on 9/21/17.
  */
 
-public class ArticleItemNoImage extends RecyclerView.ViewHolder{
+public class ArticleItemCardView extends RecyclerView.ViewHolder {
 
     public TextView getTvArticleTitile() {
         return tvArticleTitile;
@@ -28,14 +28,22 @@ public class ArticleItemNoImage extends RecyclerView.ViewHolder{
         return tvArticleSnippet;
     }
 
-    @BindView(R.id.tvArticleTitlePlain)TextView tvArticleTitile;
-    @BindView(R.id.tvNewsDeskPlain) TextView tvNewsDesk;
-    @BindView(R.id.tvArticleSnippetPlain) TextView tvArticleSnippet;
+    public ImageView getIvArticleImage() {
+        return ivArticleImage;
+    }
 
 
-    public ArticleItemNoImage(View itemView) {
+    @BindView(R.id.tvArticleTitle) TextView tvArticleTitile;
+    @BindView(R.id.tvNewsDesk) TextView tvNewsDesk;
+    @BindView(R.id.tvArticleSnippet) TextView tvArticleSnippet;
+    @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
+
+
+    public ArticleItemCardView(View itemView) {
         super(itemView);
 
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
+
+
     }
 }

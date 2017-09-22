@@ -9,13 +9,12 @@
     card_view:cardCornerRadius="8dp"
     android:layout_marginBottom="16dp">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ImageView
+        <ImageView
         android:id="@+id/ivArticleImage"
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_height"
@@ -26,28 +25,28 @@
         android:layout_marginRight="@dimen/imgviewMargin"
         android:layout_gravity="center_horizontal|center_vertical"/>
 
-    <TextView
+        <TextView
         android:id="@+id/tvArticleTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
         android:text="TextView" />
 
-    <TextView
+        <TextView
         android:id="@+id/tvNewsDesk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:text="TextView" />
 
-    <TextView
+        <TextView
         android:id="@+id/tvArticleSnippet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_marginTop="16dp" />
 
-</LinearLayout>
+    </LinearLayout>
 
 
 </android.support.v7.widget.CardView>
