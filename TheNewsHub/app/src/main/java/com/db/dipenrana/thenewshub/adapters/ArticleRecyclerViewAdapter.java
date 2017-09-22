@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.db.dipenrana.thenewshub.R;
+import com.db.dipenrana.thenewshub.activities.ArticleItemCardView;
+import com.db.dipenrana.thenewshub.activities.ArticleItemNoImageCardView;
 import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -47,15 +49,15 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case Image:
                 //View vPoster = inflater.inflate(R.layout.article_item_with_image, parent, false);
                 View vPoster = inflater.inflate(R.layout.article_item_cardview, parent, false);
-                viewHolder = new ArticleItemWithImage(vPoster);
+                viewHolder = new ArticleItemCardView(vPoster);
                 break;
             case NoImage:
                 View vLandscape = inflater.inflate(R.layout.article_item_no_image_cardview, parent, false);
-                viewHolder = new ArticleItemNoImage(vLandscape);
+                viewHolder = new ArticleItemNoImageCardView(vLandscape);
                 break;
             default:
                 View v = inflater.inflate(android.R.layout.simple_list_item_activated_1, parent, false);
-                viewHolder = new ArticleItemWithImage(v);
+                viewHolder = new ArticleItemCardView(v);
                 break;
         }
         return viewHolder;
@@ -66,16 +68,16 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         switch (holder.getItemViewType()) {
             case Image:
-                ArticleItemWithImage vh1 = (ArticleItemWithImage) holder;
+                ArticleItemCardView vh1 = (ArticleItemCardView) holder;
                 BindItemWithImage(vh1,position);
                 break;
             case NoImage:
-                ArticleItemNoImage vh2 = (ArticleItemNoImage) holder;
+                ArticleItemNoImageCardView vh2 = (ArticleItemNoImageCardView) holder;
                 BindItemWithNoImage(vh2,position);
                 //configureLandscapeActivity(vh2, position);
                 break;
             default:
-                ArticleItemWithImage vh = (ArticleItemWithImage) holder;
+                ArticleItemCardView vh = (ArticleItemCardView) holder;
                 //configureDefaultViewHolder(vh, position);
                 break;
         }
@@ -120,7 +122,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
 
-    private void BindItemWithImage(ArticleItemWithImage holder, int position) {
+    private void BindItemWithImage(ArticleItemCardView holder, int position) {
         // Get the data model based on position
         Article article = mArticles.get(position);
         TextView tvTitle = holder.getTvArticleTitile();
@@ -147,7 +149,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
 
-    private void BindItemWithNoImage(ArticleItemNoImage holder, int position) {
+    private void BindItemWithNoImage(ArticleItemNoImageCardView holder, int position) {
 
         // Get the data model based on position
         Article article = mArticles.get(position);
