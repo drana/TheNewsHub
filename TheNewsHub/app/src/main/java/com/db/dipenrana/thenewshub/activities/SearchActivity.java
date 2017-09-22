@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +62,9 @@ public class SearchActivity extends AppCompatActivity {
     RecyclerView rvArticleItems;
     MenuItem searchItem;
 
+    //staggered view
+    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +79,16 @@ public class SearchActivity extends AppCompatActivity {
         //instance of adapter
         articleRecyclerViewAdapter = new ArticleRecyclerViewAdapter(this,articles);
         rvArticleItems = findViewById(R.id.rvResults);
+        rvArticleItems.setHasFixedSize(true);
 
         //attach adapter to view
         rvArticleItems.setAdapter(articleRecyclerViewAdapter);
-        rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
+
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
+        rvArticleItems.setLayoutManager(gaggeredGridLayoutManager);
+
+
+        //rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
 
         SetupListViewCLickListener();
 
