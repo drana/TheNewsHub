@@ -66,6 +66,9 @@ public class Article implements Parcelable{
     @SerializedName("uri")
     @Expose
     private String uri;
+    @SerializedName("meta")
+    @Expose
+    private Meta meta;
 
 
     protected Article(Parcel in) {
@@ -116,6 +119,14 @@ public class Article implements Parcelable{
 
     public List<Multimedium> getMultimedia() {
         return multimedia;
+    }
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
     }
 
     public void setMultimedia(List<Multimedium> multimedia) {
@@ -380,6 +391,44 @@ public class Article implements Parcelable{
 
         public void setValue(String value) {
             this.value = value;
+        }
+
+    }
+
+    public class Meta {
+
+        @SerializedName("hits")
+        @Expose
+        private Integer hits;
+        @SerializedName("offset")
+        @Expose
+        private Integer offset;
+        @SerializedName("time")
+        @Expose
+        private Integer time;
+
+        public Integer getHits() {
+            return hits;
+        }
+
+        public void setHits(Integer hits) {
+            this.hits = hits;
+        }
+
+        public Integer getOffset() {
+            return offset;
+        }
+
+        public void setOffset(Integer offset) {
+            this.offset = offset;
+        }
+
+        public Integer getTime() {
+            return time;
+        }
+
+        public void setTime(Integer time) {
+            this.time = time;
         }
 
     }

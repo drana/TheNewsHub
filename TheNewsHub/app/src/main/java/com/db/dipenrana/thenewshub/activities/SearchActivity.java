@@ -46,13 +46,16 @@ public class SearchActivity extends AppCompatActivity {
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
+    String queryURL;
+    String searchQuery;
 
     //define adapter and recycle view
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
     RecyclerView rvArticleItems;
     MenuItem searchItem;
     SearchView searchView;
-
+    EndlessRecyclerViewScrollListener scrollListener;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class SearchActivity extends AppCompatActivity {
         rvArticleItems.setAdapter(articleRecyclerViewAdapter);
 
 
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         rvArticleItems.setLayoutManager(staggeredGridLayoutManager);
 
         //rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
@@ -81,12 +84,17 @@ public class SearchActivity extends AppCompatActivity {
         SetupListViewCLickListener();
 
         // Retain an instance so that you can call `resetState()` for fresh searches
-        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
+                try{
                 loadNextDataFromApi(page);
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -95,12 +103,14 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void loadNextDataFromApi(int page) {
+    private void loadNextDataFromApi(int page) throws IOException {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+        FetchNewArticles(searchQuery,page);
+
     }
 
     @Override
@@ -121,7 +131,10 @@ public class SearchActivity extends AppCompatActivity {
                 // perform query here
                 //SearchArticle(query);
                 try {
-                    ConnectHttpClient(query);
+                    ResetLayout();
+                    searchQuery = query;
+                    //page = 0
+                    FetchNewArticles(query,0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,6 +152,16 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    private void ResetLayout() {
+        searchQuery="";
+        // 1. First, clear the array of data
+        articles.clear();
+// 2. Notify the adapter of the update
+        articleRecyclerViewAdapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
+// 3. Reset endless scroll listener when performing a new search
+        scrollListener.resetState();
     }
 
     @Override
@@ -168,21 +191,12 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void SearchArticle(String query) {
-        Log.d("Button","Search Button clicked");
-        try {
-            ConnectHttpClient(query);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     //setup async http client
-    private void ConnectHttpClient(String query4client) throws IOException {
+    private void FetchNewArticles(String query4client, int page) throws IOException {
 
         // filter url
-        String queryURL = getQueryURL(query4client);
-        final String[] owner = new String[1];
+        queryURL = getQueryURL(query4client,page);
+        //final String[] owner = new String[1];
         // should be a singleton
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -204,16 +218,14 @@ public class SearchActivity extends AppCompatActivity {
                                                 try {
                                                     jsonResponse = new JSONObject(response.body().string());
                                                     JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
-                                                    articles.clear();
                                                     articles.addAll(Article.parseJsonArray(resultsArray.toString()));
-
                                                     SearchActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
                                                             articleRecyclerViewAdapter.notifyDataSetChanged();
                                                         }
                                                     });
-                                                            Log.d("response","got array list of articles");
+                                                    Log.d("response","notify articles dataset changed");
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                     Log.d("response","Failed to get array list of articles");
@@ -252,14 +264,28 @@ public class SearchActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public String getQueryURL(String query){
+    public String getQueryURL(String query,int page){
 
         //build url with params
         HttpUrl.Builder urlBuilder = HttpUrl.parse(NetworkUtils.API_URL).newBuilder();
         urlBuilder.addQueryParameter("api-key", "3ae9d158e4744dfb85debb2906d27b77");
         urlBuilder.addQueryParameter("q", query);
+        if(page >0)
+        {
+            urlBuilder.addQueryParameter("page",Integer.toString(page));
+        }
         String url = urlBuilder.build().toString();
         return url;
     }
 
 }
+
+
+//    private void SearchArticle(String query) {
+//        Log.d("Button","Search Button clicked");
+//        try {
+//            ConnectHttpClient(query);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
