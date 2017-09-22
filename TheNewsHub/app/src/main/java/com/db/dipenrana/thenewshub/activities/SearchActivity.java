@@ -1,5 +1,6 @@
 package com.db.dipenrana.thenewshub.activities;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -49,8 +51,8 @@ import static android.R.attr.onClick;
 
 public class SearchActivity extends AppCompatActivity {
 
-    @BindView(R.id.etQuery) EditText etSearchQuery;
-    @BindView(R.id.btnSearch) Button btnSearchQuery;
+//    @BindView(R.id.etQuery) EditText etSearchQuery;
+//    @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -61,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
     RecyclerView rvArticleItems;
     MenuItem searchItem;
+    SearchView searchView;
 
     //staggered view
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
@@ -88,6 +91,7 @@ public class SearchActivity extends AppCompatActivity {
         rvArticleItems.setLayoutManager(gaggeredGridLayoutManager);
 
 
+
         //rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
 
         SetupListViewCLickListener();
@@ -101,19 +105,19 @@ public class SearchActivity extends AppCompatActivity {
 
         SearchManager searchManager = (SearchManager)getSystemService(this.SEARCH_SERVICE);
         searchItem = menu.findItem(R.id.miSearch);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
+        searchView = (SearchView) searchItem.getActionView();
+        hideSoftKeyboard(searchView);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("enter keyword");
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
                 SearchArticle(query);
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                //searchView.clearFocus();
-
+                hideSoftKeyboard(searchView);
+                searchView.setQuery("",false);
+                searchView.clearFocus();
                 return true;
             }
 
@@ -156,19 +160,6 @@ public class SearchActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @OnClick(R.id.btnSearch)
-    public void onClickSearch(){
-        Log.d("Button","Search Button clicked");
-        String query = etSearchQuery.getText().toString();
-
-        try {
-            ConnectHttpClient(query);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     //setup async http client
@@ -240,17 +231,10 @@ public class SearchActivity extends AppCompatActivity {
         );
     }
 
-//    private void parseJson(String responseData) {
-//        try {
-//            Gson gson = new GsonBuilder().create();
-//            Article[] articles = gson.fromJson(responseData, Article[].class);
-//            int temp = 0;
-//        }
-//        catch (Exception ex)
-//        {
-//            ex.printStackTrace();
-//        }
-//    }
+    public void hideSoftKeyboard(View view){
+        InputMethodManager imm =(InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     public String getQueryURL(String query){
 

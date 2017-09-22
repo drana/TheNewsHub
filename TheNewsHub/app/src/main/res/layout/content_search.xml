@@ -9,31 +9,31 @@
     tools:showIn="@layout/activity_search">
 
 
-    <EditText
-        android:id="@+id/etQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/searchMargin"
-        android:hint="search query"
-        android:layout_toStartOf="@+id/btnSearch"
-        android:layout_alignBottom="@+id/btnSearch"
-        android:inputType="none"/>
+    <!--<EditText-->
+        <!--android:id="@+id/etQuery"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginTop="@dimen/searchMargin"-->
+        <!--android:hint="search query"-->
+        <!--android:layout_toStartOf="@+id/btnSearch"-->
+        <!--android:layout_alignBottom="@+id/btnSearch"-->
+        <!--android:inputType="none"/>-->
 
-    <Button
-        android:id="@+id/btnSearch"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="@string/btntxtSearch"
-        android:textAllCaps="false"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/searchMargin"
-        />
+    <!--<Button-->
+        <!--android:id="@+id/btnSearch"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:text="@string/btntxtSearch"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginTop="@dimen/searchMargin"-->
+        <!--/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnSearch" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
