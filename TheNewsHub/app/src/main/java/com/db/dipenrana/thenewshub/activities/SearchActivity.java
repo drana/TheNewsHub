@@ -1,13 +1,17 @@
 package com.db.dipenrana.thenewshub.activities;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,8 +58,7 @@ public class SearchActivity extends AppCompatActivity {
     //define adapter and recycle view
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
     RecyclerView rvArticleItems;
-
-
+    MenuItem searchItem;
 
 
     @Override
@@ -83,7 +86,65 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article_activity,menu);
+
+
+        SearchManager searchManager = (SearchManager)getSystemService(this.SEARCH_SERVICE);
+        searchItem = menu.findItem(R.id.miSearch);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // perform query here
+                SearchArticle(query);
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                //searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        item.getItemId();
+        return  super.onOptionsItemSelected(item);
+//        switch (item.getItemId()){
+//            case R.id.miSearch:
+//                Search();
+//                return  true;
+//            case R.id.miFilter:
+//                Filter();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+
+
+    }
+
+    private void Filter() {
+
+    }
+
+    private void SearchArticle(String query) {
+        Log.d("Button","Search Button clicked");
+        try {
+            ConnectHttpClient(query);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.btnSearch)
