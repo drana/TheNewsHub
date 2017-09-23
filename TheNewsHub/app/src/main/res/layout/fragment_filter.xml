@@ -107,7 +107,7 @@
             android:layout_weight="1"
             android:layout_marginTop="10dp"
             style="?android:attr/borderlessButtonStyle"
-            android:text="Save"/>
+            android:text="Apply"/>
 
         <View
             android:layout_width="2dp"

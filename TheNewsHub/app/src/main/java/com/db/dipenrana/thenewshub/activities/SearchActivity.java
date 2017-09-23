@@ -21,6 +21,7 @@ import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
 import com.db.dipenrana.thenewshub.fragments.FilterFragment;
 import com.db.dipenrana.thenewshub.models.Article;
+import com.db.dipenrana.thenewshub.models.ArticleFilter;
 import com.db.dipenrana.thenewshub.utils.EndlessRecyclerViewScrollListener;
 import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
 import com.db.dipenrana.thenewshub.utils.NetworkUtils;
@@ -40,7 +41,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements FilterFragment.FiltersDialogListener {
 
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -60,6 +61,8 @@ public class SearchActivity extends AppCompatActivity {
     //article page info
     int articleHits;
     int articleOffset;
+    // Article filter
+    ArticleFilter appliedFilters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class SearchActivity extends AppCompatActivity {
         SetupListViewCLickListener();
 
         //Setup scrolllistner
-        SetupScrollListner();
+        SetupScrollListener();
 
     }
 
@@ -136,11 +139,9 @@ public class SearchActivity extends AppCompatActivity {
         item.getItemId();
 
         if(item.getItemId() == R.id.miFilter){
-
             FragmentManager fm = getSupportFragmentManager();
             FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
             filterFragment.show(fm, "fragFilter");
-
         }
         return  true;
     }
@@ -166,7 +167,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     //attach endless scroll listeners
-    private void SetupScrollListner() {
+    private void SetupScrollListener() {
         // Retain an instance so that you can call `resetState()` for fresh searches
         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
@@ -207,9 +208,9 @@ public class SearchActivity extends AppCompatActivity {
     private void FetchNewArticles(String query4client, int page) throws IOException {
 
         // filter url
-        queryURL = getQueryURL(query4client,page);
-        //final String[] owner = new String[1];
-        // should be a singleton
+        queryURL = getQueryURL(query4client,page,appliedFilters);
+
+        // setup network client for search requests
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(queryURL)
@@ -274,17 +275,26 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     //build url for search query
-    public String getQueryURL(String query,int page){
+    public String getQueryURL(String query,int page,ArticleFilter newsFilter){
 
         //build url with params
         HttpUrl.Builder urlBuilder = HttpUrl.parse(NetworkUtils.API_URL).newBuilder();
         urlBuilder.addQueryParameter("api-key", "3ae9d158e4744dfb85debb2906d27b77");
         urlBuilder.addQueryParameter("q", query);
+        if(newsFilter != null){
+            urlBuilder.addQueryParameter("sort",newsFilter.getSortSelection().toString());
+        }
         if(page >0)
         {
             urlBuilder.addQueryParameter("page",Integer.toString(page));
         }
         return (urlBuilder.build().toString());
+    }
+
+    @Override
+    public void onApplyArticleFilters(ArticleFilter articleFilter){
+        appliedFilters = articleFilter;
+    Log.d("filters",articleFilter.getSelectedDate());
     }
 
 }

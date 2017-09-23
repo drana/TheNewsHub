@@ -1,8 +1,6 @@
 package com.db.dipenrana.thenewshub.fragments;
 
 
-import android.app.Dialog;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -27,12 +25,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FilterFragment extends DialogFragment {
+public class FilterFragment extends DialogFragment implements View.OnClickListener{
+
+    //region butterknife
     @BindView(R.id.cbArtsBox) CheckBox cbArts;
     @BindView(R.id.cbSportsBox) CheckBox cbSports;
     @BindView(R.id.cbAutomobiles) CheckBox cbAutomobiles;
@@ -42,12 +41,11 @@ public class FilterFragment extends DialogFragment {
     @BindView(R.id.sortOrder)Spinner sortOrderSpinner;
     @BindView(R.id.btnSave) Button btnSaveClick;
     @BindView(R.id.btnCancel) Button btnCancelClick;
-
+    //endregion
     String selectedDate;
     List<String> cbNewsSection = new ArrayList<String>();
     String sortSelection;
-
-    //ArticleFilter articleFilters = new ArticleFilter();
+    ArticleFilter articleFilters;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -55,11 +53,11 @@ public class FilterFragment extends DialogFragment {
 
     public static FilterFragment newInstance(String param1, String param2) {
         FilterFragment fragment = new FilterFragment();
+
 //        Bundle args = new Bundle();
 //        fragment.setArguments(args);
         return fragment;
     }
-
 
     // Inflate the layout for this fragment
     @Override
@@ -71,33 +69,34 @@ public class FilterFragment extends DialogFragment {
         return view;
     }
 
-
     //attach listners and view lookups
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         //setup btn click listner
-        View.OnClickListener btnClicklistner = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.btnSave:
-                        OnSave();
-                        break;
-                    case R.id.btnCancel:
-                        OnCancel();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
+//        View.OnClickListener btnClicklistner = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()){
+//                    case R.id.btnSave:
+//                        OnApplyFilters();
+//                        break;
+//                    case R.id.btnCancel:
+//                        OnCancel();
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        };
 
-        btnSaveClick.setOnClickListener(btnClicklistner);
-        btnCancelClick.setOnClickListener(btnClicklistner);
+//        btnSaveClick.setOnClickListener(btnClicklistner);
+//        btnCancelClick.setOnClickListener(btnClicklistner);
+        btnSaveClick.setOnClickListener(this);
+        btnCancelClick.setOnClickListener(this);
 
         //setup spinner.
-        String[] items = new String[]{"Oldest", "Latest"};
+        String[] items = new String[]{"Latest","Oldest"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         sortOrderSpinner.setAdapter(adapter);
 
@@ -106,15 +105,38 @@ public class FilterFragment extends DialogFragment {
     }
 
     @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnSave:
+                OnApplyFilters();
+                break;
+            case R.id.btnCancel:
+                OnCancel();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
     }
 
+    //interface for passing filters back to activity
+    public interface FiltersDialogListener{
+        void onApplyArticleFilters(ArticleFilter articleFilter);
+    }
+
     //get filter values and store it in pojo
-    public void OnSave(){
+    public void OnApplyFilters(){
         selectedDate = getSelectedDate();
         sortSelection = sortOrderSpinner.getSelectedItem().toString();
         cbNewsSection = getSubSections();
+        articleFilters = new ArticleFilter(selectedDate,sortSelection,cbNewsSection);
+        FiltersDialogListener mListener = (FiltersDialogListener) getActivity();
+        mListener.onApplyArticleFilters(articleFilters);
+        dismiss();
         Log.d("btn","save clicked");
     }
 
@@ -150,8 +172,8 @@ public class FilterFragment extends DialogFragment {
         return  dueDateSelected;
     }
 
-
     public void OnCancel(){
+        dismiss();
         Log.d("btn","cancel clicked");
     }
 

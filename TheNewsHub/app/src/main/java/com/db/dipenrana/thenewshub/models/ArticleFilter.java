@@ -17,6 +17,13 @@ public class ArticleFilter implements Parcelable{
         sortSelection = in.readString();
     }
 
+    //required empty contructor;
+    public ArticleFilter(String date,String sortSelection, List<String> newsSection)
+    {
+        this.selectedDate = date;
+        this.sortSelection = sortSelection;
+        this.cbNewsSection = newsSection;
+    }
     public static final Creator<ArticleFilter> CREATOR = new Creator<ArticleFilter>() {
         @Override
         public ArticleFilter createFromParcel(Parcel in) {
