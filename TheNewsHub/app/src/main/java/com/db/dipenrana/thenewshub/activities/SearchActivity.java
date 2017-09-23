@@ -210,7 +210,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     private void FetchNewArticles(String newQuery, int page) throws IOException {
 
         // filter url
-        queryURL = getQueryURL(newQuery,page,appliedFilters);
+        queryURL = CommonUtils.getQueryURL(newQuery,page,appliedFilters);
 
         // setup network client for search requests
         OkHttpClient client = new OkHttpClient();
