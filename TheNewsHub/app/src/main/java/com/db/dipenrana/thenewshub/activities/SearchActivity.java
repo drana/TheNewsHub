@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 
 import com.db.dipenrana.thenewshub.R;
@@ -39,8 +40,6 @@ import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
 
-//    @BindView(R.id.etQuery) EditText etSearchQuery;
-//    @BindView(R.id.btnSearch) Button btnSearchQuery;
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -56,6 +55,9 @@ public class SearchActivity extends AppCompatActivity {
     SearchView searchView;
     EndlessRecyclerViewScrollListener scrollListener;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
+    //article page info
+    int articleHits;
+    int articleOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +77,11 @@ public class SearchActivity extends AppCompatActivity {
         //attach adapter to view
         rvArticleItems.setAdapter(articleRecyclerViewAdapter);
 
-
+        //setup staggeredGridLayout
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         rvArticleItems.setLayoutManager(staggeredGridLayoutManager);
 
-        //rvArticleItems.setLayoutManager(new LinearLayoutManager(this));
-
+        //on an article click event
         SetupListViewCLickListener();
 
         // Retain an instance so that you can call `resetState()` for fresh searches
@@ -109,7 +110,12 @@ public class SearchActivity extends AppCompatActivity {
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
-        FetchNewArticles(searchQuery,page);
+        if(articleOffset<articleHits) {
+            FetchNewArticles(searchQuery, page);
+            Log.d("Pages added",Integer.toString(page));
+        }
+        else
+        Toast.makeText(this, "All pages found Please try another search", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -128,12 +134,10 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                // perform query here
-                //SearchArticle(query);
                 try {
                     ResetLayout();
                     searchQuery = query;
-                    //page = 0
+                    //first query should have page 0
                     FetchNewArticles(query,0);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -155,12 +159,13 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void ResetLayout() {
+        //clear search query
         searchQuery="";
         // 1. First, clear the array of data
         articles.clear();
-// 2. Notify the adapter of the update
+        // 2. Notify the adapter of the update
         articleRecyclerViewAdapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
-// 3. Reset endless scroll listener when performing a new search
+        // 3. Reset endless scroll listener when performing a new search
         scrollListener.resetState();
     }
 
@@ -171,27 +176,16 @@ public class SearchActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.miFilter){
 
+//            FragmentManager fm = getSupportFragmentManager();
+//            FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
+//            filterFragment.show(fm, "fragment_filter");
+
         }
-        return  super.onOptionsItemSelected(item);
-//        switch (item.getItemId()){
-//            case R.id.miSearch:
-//                Search();
-//                return  true;
-//            case R.id.miFilter:
-//                Filter();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-
-
+        return  true;
     }
 
-    private void Filter() {
 
-    }
-
-    //setup async http client
+    //setup okhttp client and fetch articles from nyt api
     private void FetchNewArticles(String query4client, int page) throws IOException {
 
         // filter url
@@ -213,11 +207,14 @@ public class SearchActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call call, final Response response) throws IOException {
                                                 Log.d("response","Got response");
-                                                //String responseData = response.body().string();
                                                 JSONObject jsonResponse = null;
                                                 try {
                                                     jsonResponse = new JSONObject(response.body().string());
                                                     JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
+                                                    JSONObject pageInfo =  jsonResponse.getJSONObject("response").getJSONObject("meta");
+                                                    articleHits = pageInfo.getInt("hits");
+                                                    articleOffset = pageInfo.getInt("offset");
+
                                                     articles.addAll(Article.parseJsonArray(resultsArray.toString()));
                                                     SearchActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
@@ -274,18 +271,7 @@ public class SearchActivity extends AppCompatActivity {
         {
             urlBuilder.addQueryParameter("page",Integer.toString(page));
         }
-        String url = urlBuilder.build().toString();
-        return url;
+        return (urlBuilder.build().toString());
     }
 
 }
-
-
-//    private void SearchArticle(String query) {
-//        Log.d("Button","Search Button clicked");
-//        try {
-//            ConnectHttpClient(query);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
