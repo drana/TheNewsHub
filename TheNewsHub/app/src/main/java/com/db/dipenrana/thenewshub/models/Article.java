@@ -18,6 +18,8 @@ import java.util.List;
 
 public class Article implements Parcelable{
 
+    //region serialized fields
+
     @SerializedName("web_url")
     @Expose
     private String webUrl;
@@ -69,7 +71,7 @@ public class Article implements Parcelable{
     @SerializedName("meta")
     @Expose
     private Meta meta;
-
+//endregion
 
     protected Article(Parcel in) {
         webUrl = in.readString();
@@ -99,7 +101,7 @@ public class Article implements Parcelable{
         }
     };
 
-    //<editor-fold Description"Getters & Setters">
+    //region getters and setters
     public String getWebUrl() {
         return webUrl;
     }
@@ -115,7 +117,6 @@ public class Article implements Parcelable{
     public void setSnippet(String snippet) {
         this.snippet = snippet;
     }
-
 
     public List<Multimedium> getMultimedia() {
         return multimedia;
@@ -237,6 +238,8 @@ public class Article implements Parcelable{
         this.uri = uri;
     }
 
+    //endregion
+
     @Override
     public int describeContents() {
         return 0;
@@ -259,6 +262,7 @@ public class Article implements Parcelable{
         parcel.writeString(uri);
     }
 
+    // region sub class
     public class Headline {
 
         @SerializedName("main")
@@ -432,9 +436,7 @@ public class Article implements Parcelable{
         }
 
     }
-
-    //</editor-fold>
-
+    //endregion
 
     public static ArrayList<Article> parseJsonArray(String responseData) {
         ArrayList<Article> articles = new ArrayList<Article>();

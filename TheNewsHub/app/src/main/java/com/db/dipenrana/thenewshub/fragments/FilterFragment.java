@@ -3,6 +3,7 @@ package com.db.dipenrana.thenewshub.fragments;
 
 import android.app.Dialog;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 
 import com.db.dipenrana.thenewshub.R;
+import com.db.dipenrana.thenewshub.models.ArticleFilter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class FilterFragment extends DialogFragment {
     List<String> cbNewsSection = new ArrayList<String>();
     String sortSelection;
 
+    //ArticleFilter articleFilters = new ArticleFilter();
+
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -57,11 +61,20 @@ public class FilterFragment extends DialogFragment {
     }
 
 
+    // Inflate the layout for this fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter,container,false);
         ButterKnife.bind(this,view);
+
+        return view;
+    }
+
+
+    //attach listners and view lookups
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         //setup btn click listner
         View.OnClickListener btnClicklistner = new View.OnClickListener() {
@@ -88,10 +101,8 @@ public class FilterFragment extends DialogFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         sortOrderSpinner.setAdapter(adapter);
 
-        //setup checkbox
 
-        // Inflate the layout for this fragment
-        return view;
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -99,13 +110,12 @@ public class FilterFragment extends DialogFragment {
         super.onDetach();
     }
 
-
+    //get filter values and store it in pojo
     public void OnSave(){
         selectedDate = getSelectedDate();
         sortSelection = sortOrderSpinner.getSelectedItem().toString();
         cbNewsSection = getSubSections();
         Log.d("btn","save clicked");
-
     }
 
     private List<String> getSubSections() {

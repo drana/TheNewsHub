@@ -86,38 +86,8 @@ public class SearchActivity extends AppCompatActivity {
         //on an article click event
         SetupListViewCLickListener();
 
-        // Retain an instance so that you can call `resetState()` for fresh searches
-         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                try{
-                loadNextDataFromApi(page);
-                }
-                catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        // Adds the scroll listener to RecyclerView
-        rvArticleItems.addOnScrollListener(scrollListener);
-
-    }
-
-    private void loadNextDataFromApi(int page) throws IOException {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
-        if(articleOffset<articleHits) {
-            FetchNewArticles(searchQuery, page);
-            Log.d("Pages added",Integer.toString(page));
-        }
-        else
-        Toast.makeText(this, "All pages found Please try another search", Toast.LENGTH_SHORT).show();
+        //Setup scrolllistner
+        SetupScrollListner();
 
     }
 
@@ -160,17 +130,6 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    private void ResetLayout() {
-        //clear search query
-        searchQuery="";
-        // 1. First, clear the array of data
-        articles.clear();
-        // 2. Notify the adapter of the update
-        articleRecyclerViewAdapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
-        // 3. Reset endless scroll listener when performing a new search
-        scrollListener.resetState();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -186,59 +145,7 @@ public class SearchActivity extends AppCompatActivity {
         return  true;
     }
 
-
-    //setup okhttp client and fetch articles from nyt api
-    private void FetchNewArticles(String query4client, int page) throws IOException {
-
-        // filter url
-        queryURL = getQueryURL(query4client,page);
-        //final String[] owner = new String[1];
-        // should be a singleton
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(queryURL)
-                .build();
-
-        // Get a handler that can be used to post to the main thread
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-                                            @Override
-                                            public void onFailure(Call call, IOException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                            @Override
-                                            public void onResponse(Call call, final Response response) throws IOException {
-                                                Log.d("response","Got response");
-                                                JSONObject jsonResponse = null;
-                                                try {
-                                                    jsonResponse = new JSONObject(response.body().string());
-                                                    JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
-                                                    JSONObject pageInfo =  jsonResponse.getJSONObject("response").getJSONObject("meta");
-                                                    articleHits = pageInfo.getInt("hits");
-                                                    articleOffset = pageInfo.getInt("offset");
-
-                                                    articles.addAll(Article.parseJsonArray(resultsArray.toString()));
-                                                    SearchActivity.this.runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            articleRecyclerViewAdapter.notifyDataSetChanged();
-                                                        }
-                                                    });
-                                                    Log.d("response","notify articles dataset changed");
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                    Log.d("response","Failed to get array list of articles");
-                                                }
-                                                if (!response.isSuccessful()) {
-                                                    throw new IOException("Unexpected code " + response);
-                                                }
-                                            }
-                                        });
-
-        Log.d("Connect", "Got response from NYT");
-
-    }
-
+    //attach listeners for article items
     private void SetupListViewCLickListener() {
 
         ItemClickSupport.addTo(rvArticleItems).setOnItemClickListener(
@@ -258,11 +165,115 @@ public class SearchActivity extends AppCompatActivity {
         );
     }
 
+    //attach endless scroll listeners
+    private void SetupScrollListner() {
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                try{
+                    loadNextDataFromApi(page);
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        // Adds the scroll listener to RecyclerView
+        rvArticleItems.addOnScrollListener(scrollListener);
+
+    }
+
+    //setup data for endless scroll listeners
+    private void loadNextDataFromApi(int page) throws IOException {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+        if(articleOffset<articleHits) {
+            FetchNewArticles(searchQuery, page);
+            Log.d("Pages added",Integer.toString(page));
+        }
+        else
+            Toast.makeText(this, "All pages found Please try another search", Toast.LENGTH_SHORT).show();
+
+    }
+
+    //setup okhttp client and fetch articles from nyt api
+    private void FetchNewArticles(String query4client, int page) throws IOException {
+
+        // filter url
+        queryURL = getQueryURL(query4client,page);
+        //final String[] owner = new String[1];
+        // should be a singleton
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(queryURL)
+                .build();
+
+        // Get a handler that can be used to post to the main thread
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                Log.d("response","Got response");
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = new JSONObject(response.body().string());
+                    JSONArray resultsArray = jsonResponse.getJSONObject("response").getJSONArray("docs");
+                    JSONObject pageInfo =  jsonResponse.getJSONObject("response").getJSONObject("meta");
+                    articleHits = pageInfo.getInt("hits");
+                    articleOffset = pageInfo.getInt("offset");
+
+                    articles.addAll(Article.parseJsonArray(resultsArray.toString()));
+                    SearchActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            articleRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    Log.d("response","notify articles dataset changed");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("response","Failed to get array list of articles");
+                }
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+            }
+        });
+
+        Log.d("Connect", "Got response from NYT");
+
+    }
+
+    //clear layout before another search
+    private void ResetLayout() {
+        //clear search query
+        searchQuery="";
+        // 1. First, clear the array of data
+        articles.clear();
+        // 2. Notify the adapter of the update
+        articleRecyclerViewAdapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
+        // 3. Reset endless scroll listener when performing a new search
+        scrollListener.resetState();
+    }
+
+    //hide keyboard after search enter
     public void hideSoftKeyboard(View view){
         InputMethodManager imm =(InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    //build url for search query
     public String getQueryURL(String query,int page){
 
         //build url with params
