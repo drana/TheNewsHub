@@ -1,13 +1,115 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.db.dipenrana.thenewshub.fragments.FilterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvBeginDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:layout_alignParentStart="true"
+        />
 
-</FrameLayout>
+    <DatePicker
+        android:id="@+id/filterDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvBeginDate"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:spinnersShown="true"
+        android:padding="0dp"
+        android:scaleX="0.9"
+        android:scaleY="0.9" />
+
+
+    <TextView
+        android:id="@+id/llSortOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filterDate"
+        android:layout_marginTop="5dp"
+        android:text="Sort"
+        />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filterDate"
+        android:layout_toRightOf="@id/llSortOrder"
+        android:layout_weight="1"/>
+
+
+    <TextView
+        android:id="@+id/tvNewsSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llSortOrder"
+        android:layout_marginTop="5dp"
+        android:text="SubSection"
+        />
+    <CheckBox
+        android:id="@+id/cbSportsBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:layout_below="@id/llSortOrder"
+        android:text="Sports"
+        />
+    <CheckBox
+        android:id="@+id/cbArtsBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbSportsBox"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:text="Arts"/>
+    <CheckBox
+        android:id="@+id/cbFashionBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbArtsBox"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:text="Fashion"/>
+    <CheckBox
+        android:id="@+id/cbBusiness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbFashionBox"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:text="Business"/>
+    <CheckBox
+        android:id="@+id/cbAutomobiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbBusiness"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:text="Automobiles"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbAutomobiles"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+
+            android:text="Save"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:text="Cancel"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

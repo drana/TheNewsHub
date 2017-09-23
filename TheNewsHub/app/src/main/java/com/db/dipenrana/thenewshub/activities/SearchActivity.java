@@ -180,7 +180,7 @@ public class SearchActivity extends AppCompatActivity {
 
             FragmentManager fm = getSupportFragmentManager();
             FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
-            filterFragment.show(fm, "fragment_filter");
+            filterFragment.show(fm, "fragFilter");
 
         }
         return  true;
