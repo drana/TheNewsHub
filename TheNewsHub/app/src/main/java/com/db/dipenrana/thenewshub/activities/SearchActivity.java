@@ -3,6 +3,7 @@ package com.db.dipenrana.thenewshub.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
+import com.db.dipenrana.thenewshub.fragments.FilterFragment;
 import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.utils.EndlessRecyclerViewScrollListener;
 import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
@@ -176,9 +178,9 @@ public class SearchActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.miFilter){
 
-//            FragmentManager fm = getSupportFragmentManager();
-//            FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
-//            filterFragment.show(fm, "fragment_filter");
+            FragmentManager fm = getSupportFragmentManager();
+            FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
+            filterFragment.show(fm, "fragment_filter");
 
         }
         return  true;
