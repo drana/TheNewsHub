@@ -1,34 +1,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.db.dipenrana.thenewshub.fragments.FilterFragment">
 
-    <TextView
-        android:id="@+id/tvBeginDate"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llDateSelection"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Date"
-        android:layout_alignParentStart="true"
-        />
+        android:orientation="horizontal">
 
-    <DatePicker
-        android:id="@+id/selectedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvBeginDate"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:spinnersShown="true"
-        android:padding="0dp"
-        android:scaleX="0.9"
-        android:scaleY="0.9" />
+        <TextView
+            android:id="@+id/tvBeginDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Begin Date"
+            />
+
+        <EditText
+            android:id="@+id/etBeginDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="enter dateYYYMMDD"
+            android:inputType="date"
+            />
+
+        <ImageButton
+            android:id="@+id/btnDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/etBeginDate"
+            android:src="@drawable/ic_date_range"
+            android:scaleType="centerCrop"
+            android:background="@null"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+
+
+
+    <!--<DatePicker-->
+        <!--android:id="@+id/selectedDate"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/llDateSelection"-->
+        <!--android:calendarViewShown="false"-->
+        <!--android:datePickerMode="spinner"-->
+        <!--android:spinnersShown="true"-->
+        <!--android:padding="0dp"-->
+        <!--android:scaleX="0.9"-->
+        <!--android:scaleY="0.9" />-->
 
     <TextView
         android:id="@+id/llSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectedDate"
+        android:layout_below="@id/llDateSelection"
         android:layout_marginTop="5dp"
         android:text="Sort"
         />
@@ -37,7 +64,7 @@
         android:id="@+id/sortOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectedDate"
+        android:layout_below="@id/llDateSelection"
         android:layout_toRightOf="@id/llSortOrder"
         android:layout_weight="1"/>
 
@@ -54,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvNewsSection"
-        android:layout_below="@id/llSortOrder"
+        android:layout_below="@id/tvNewsSection"
         android:text="Sports"
         />
     <CheckBox

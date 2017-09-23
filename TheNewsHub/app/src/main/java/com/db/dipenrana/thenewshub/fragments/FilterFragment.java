@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.db.dipenrana.thenewshub.R;
@@ -29,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FilterFragment extends DialogFragment implements View.OnClickListener{
+public class FilterFragment extends DialogFragment implements View.OnClickListener,DatePickerFragment.BeginDateListener {
 
     //region butterknife
     @BindView(R.id.cbArtsBox) CheckBox cbArts;
@@ -37,21 +40,25 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
     @BindView(R.id.cbAutomobiles) CheckBox cbAutomobiles;
     @BindView(R.id.cbFashionBox) CheckBox cbFashion;
     @BindView(R.id.cbBusiness) CheckBox cbBusines;
-    @BindView(R.id.selectedDate)DatePicker dateSelected;
+    @BindView(R.id.etBeginDate)EditText etBeginDate;
+    //@BindView(R.id.selectedDate)DatePicker dateSelected;
     @BindView(R.id.sortOrder)Spinner sortOrderSpinner;
     @BindView(R.id.btnSave) Button btnSaveClick;
     @BindView(R.id.btnCancel) Button btnCancelClick;
+    @BindView(R.id.btnDatePicker)ImageButton btnDatePicker;
+
     //endregion
     String selectedDate;
     List<String> cbNewsSection = new ArrayList<String>();
     String sortSelection;
     ArticleFilter articleFilters;
+    String beginDate;
 
     public FilterFragment() {
         // Required empty public constructor
     }
 
-    public static FilterFragment newInstance(String param1, String param2) {
+    public static FilterFragment newInstance() {
         FilterFragment fragment = new FilterFragment();
 
 //        Bundle args = new Bundle();
@@ -92,9 +99,10 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
 
 //        btnSaveClick.setOnClickListener(btnClicklistner);
 //        btnCancelClick.setOnClickListener(btnClicklistner);
+
         btnSaveClick.setOnClickListener(this);
         btnCancelClick.setOnClickListener(this);
-
+        btnDatePicker.setOnClickListener(this);
         //setup spinner.
         String[] items = new String[]{"newest","oldest"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
@@ -113,10 +121,13 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
             case R.id.btnCancel:
                 OnCancel();
                 break;
+            case R.id.btnDatePicker:
+                OnDatePickerClick();
             default:
                 break;
         }
     }
+
 
     @Override
     public void onDetach() {
@@ -130,7 +141,7 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
 
     //get filter values and store it in pojo
     public void OnApplyFilters(){
-        selectedDate = getSelectedDate();
+        selectedDate =  etBeginDate.getText().toString();  //beginDate;
         sortSelection = sortOrderSpinner.getSelectedItem().toString();
         cbNewsSection = getSubSections();
         articleFilters = new ArticleFilter(selectedDate,sortSelection,cbNewsSection);
@@ -157,24 +168,40 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
 
     }
 
-    private String getSelectedDate() {
-        int month = dateSelected.getMonth();
-        int day = dateSelected.getDayOfMonth();
-        int year = dateSelected.getYear();
-
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-
-        SimpleDateFormat sdfformat = new SimpleDateFormat("MM-dd-yyyy");
-        String dueDateSelected = sdfformat.format(calendar.getTime());
-
-        return  dueDateSelected;
-    }
+//    private String getSelectedDate() {
+//        int month = dateSelected.getMonth();
+//        int day = dateSelected.getDayOfMonth();
+//        int year = dateSelected.getYear();
+//
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(year, month, day);
+//
+//        SimpleDateFormat sdfformat = new SimpleDateFormat("MM-dd-yyyy");
+//        String dueDateSelected = sdfformat.format(calendar.getTime());
+//
+//        return  dueDateSelected;
+//    }
 
     public void OnCancel(){
         dismiss();
         Log.d("btn","cancel clicked");
+    }
+
+    private void OnDatePickerClick() {
+
+        //DialogFragment dateFragment = new DatePickerFragment();
+        DatePickerFragment dateFragment = DatePickerFragment.newInstance();
+        // SETS the target fragment for use later when sending results
+        dateFragment.setTargetFragment(FilterFragment.this, 300);
+        dateFragment.show(getFragmentManager(), "datePicker");
+
+    }
+
+    @Override
+    public void OnFinishPickingBeginDate(String dateSelected){
+        //beginDate = dateSelected;
+        etBeginDate.setText(dateSelected);
     }
 
 }

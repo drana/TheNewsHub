@@ -1,16 +1,32 @@
 <resources>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Apply default style for alert dialogs -->
+        <item name="android:alertDialogTheme">@style/AppAlertTheme</item>
+
+    </style>
+    <!-- Define your custom alert theme here extending from base -->
+    <style name="AppAlertTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorControlNormal">@color/primary_dark</item>
+        <item name="android:textColorHighlight">@color/primary</item>
+    </style>
+
+</resources>
+
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
     <!--</style>-->
 
     <!--<style name="AppTheme.NoActionBar">-->
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="windowNoTitle">true</item>-->
     <!--</style>-->
 
     <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
@@ -18,9 +34,3 @@
     <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
     <!--Custom App Theme for Toolbar-->
-
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
-    </style>
-
-</resources>

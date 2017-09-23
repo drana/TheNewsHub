@@ -1,5 +1,6 @@
 package com.db.dipenrana.thenewshub.activities;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     int articleOffset;
     // Article filter
     ArticleFilter appliedFilters;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         if(item.getItemId() == R.id.miFilter){
             FragmentManager fm = getSupportFragmentManager();
-            FilterFragment filterFragment = FilterFragment.newInstance("Hello","World");
+            FilterFragment filterFragment = FilterFragment.newInstance();
             filterFragment.show(fm, "fragFilter");
         }
         return  true;
@@ -205,10 +207,10 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     }
 
     //setup okhttp client and fetch articles from nyt api
-    private void FetchNewArticles(String query4client, int page) throws IOException {
+    private void FetchNewArticles(String newQuery, int page) throws IOException {
 
         // filter url
-        queryURL = getQueryURL(query4client,page,appliedFilters);
+        queryURL = getQueryURL(newQuery,page,appliedFilters);
 
         // setup network client for search requests
         OkHttpClient client = new OkHttpClient();
@@ -279,7 +281,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         //build url with params
         HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
-        urlBuilder.addQueryParameter("api-key", "3ae9d158e4744dfb85debb2906d27b77");
+        urlBuilder.addQueryParameter("api-key",CommonUtils.NYT_API_KEY);
         urlBuilder.addQueryParameter("q", query);
         //check if filter applied
         if(newsFilter != null){
@@ -287,7 +289,6 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
             urlBuilder.addQueryParameter("sort",newsFilter.getSortSelection().toString());
             //news section
             int newsDesksSize = newsFilter.getCbNewsSection().size();
-            String stringNewsDesk="";
             StringBuilder newsDeskBuilder = new StringBuilder();
             if( newsDesksSize>0){
                 newsDeskBuilder.append(CommonUtils.NEWSDESK);
@@ -298,15 +299,21 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                 newsDeskBuilder.append(")");
                 urlBuilder.addQueryParameter("fq",newsDeskBuilder.toString());
             }
-            Log.d("newsdesk",newsDeskBuilder.toString());
+            //date section
+            String dateBegin = newsFilter.getSelectedDate().toString().replaceAll("-","");
+            urlBuilder.addQueryParameter("begin_date",dateBegin);
+
         }
-        if(page >0)
+        if(page >0 && page<100)
         {
             urlBuilder.addQueryParameter("page",Integer.toString(page));
         }
+        Log.d("QueryURL",urlBuilder.build().toString());
         return (urlBuilder.build().toString());
     }
 
+
+    //get filter value back from filter fragment
     @Override
     public void onApplyArticleFilters(ArticleFilter articleFilter){
         appliedFilters = articleFilter;
