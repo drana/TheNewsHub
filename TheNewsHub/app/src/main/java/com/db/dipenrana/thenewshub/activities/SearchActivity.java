@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
     @BindView(R.id.toolbar) Toolbar toolbar;
-
+    private static final String WHITESPACE = " ";
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
     String queryURL;
@@ -281,8 +281,24 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         HttpUrl.Builder urlBuilder = HttpUrl.parse(NetworkUtils.API_URL).newBuilder();
         urlBuilder.addQueryParameter("api-key", "3ae9d158e4744dfb85debb2906d27b77");
         urlBuilder.addQueryParameter("q", query);
+        //check if filter applied
         if(newsFilter != null){
+            //sort order
             urlBuilder.addQueryParameter("sort",newsFilter.getSortSelection().toString());
+            //news section
+            int newsDesksSize = newsFilter.getCbNewsSection().size();
+            String stringNewsDesk="";
+            StringBuilder newsDeskBuilder = new StringBuilder();
+            if( newsDesksSize>0){
+                newsDeskBuilder.append("news_desk:(");
+                for(int i=0;i< newsDesksSize;i++){
+                    newsDeskBuilder.append(newsFilter.getCbNewsSection().get(i));
+                    newsDeskBuilder.append(WHITESPACE);
+                }
+                newsDeskBuilder.append(")");
+                urlBuilder.addQueryParameter("fq",newsDeskBuilder.toString());
+            }
+            Log.d("newsdesk",stringNewsDesk);
         }
         if(page >0)
         {
