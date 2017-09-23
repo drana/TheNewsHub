@@ -24,7 +24,7 @@ import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.models.ArticleFilter;
 import com.db.dipenrana.thenewshub.utils.EndlessRecyclerViewScrollListener;
 import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
-import com.db.dipenrana.thenewshub.utils.NetworkUtils;
+import com.db.dipenrana.thenewshub.utils.CommonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
     @BindView(R.id.rvResults) RecyclerView rvQueryResults;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    private static final String WHITESPACE = " ";
+
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
     String queryURL;
@@ -278,7 +278,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     public String getQueryURL(String query,int page,ArticleFilter newsFilter){
 
         //build url with params
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(NetworkUtils.API_URL).newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
         urlBuilder.addQueryParameter("api-key", "3ae9d158e4744dfb85debb2906d27b77");
         urlBuilder.addQueryParameter("q", query);
         //check if filter applied
@@ -290,15 +290,15 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
             String stringNewsDesk="";
             StringBuilder newsDeskBuilder = new StringBuilder();
             if( newsDesksSize>0){
-                newsDeskBuilder.append("news_desk:(");
+                newsDeskBuilder.append(CommonUtils.NEWSDESK);
                 for(int i=0;i< newsDesksSize;i++){
                     newsDeskBuilder.append(newsFilter.getCbNewsSection().get(i));
-                    newsDeskBuilder.append(WHITESPACE);
+                    newsDeskBuilder.append(CommonUtils.WHITESPACE);
                 }
                 newsDeskBuilder.append(")");
                 urlBuilder.addQueryParameter("fq",newsDeskBuilder.toString());
             }
-            Log.d("newsdesk",stringNewsDesk);
+            Log.d("newsdesk",newsDeskBuilder.toString());
         }
         if(page >0)
         {

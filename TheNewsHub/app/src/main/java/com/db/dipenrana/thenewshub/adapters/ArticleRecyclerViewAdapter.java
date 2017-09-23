@@ -13,7 +13,7 @@ import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.activities.ArticleItemCardView;
 import com.db.dipenrana.thenewshub.activities.ArticleItemNoImageCardView;
 import com.db.dipenrana.thenewshub.models.Article;
-import com.db.dipenrana.thenewshub.utils.NetworkUtils;
+import com.db.dipenrana.thenewshub.utils.CommonUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         ImageView ivArticleImage = holder.getIvArticleImage();
         ivArticleImage.setImageResource(0);
 
-        String imgURL = NetworkUtils.IMAGE_URL_PREFIX + article.getMultimedia().get(0).getUrl();
+        String imgURL = CommonUtils.IMAGE_URL_PREFIX + article.getMultimedia().get(0).getUrl();
 
         Picasso.with(mContext)
                 .load(imgURL)
