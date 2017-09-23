@@ -96,7 +96,7 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
         btnCancelClick.setOnClickListener(this);
 
         //setup spinner.
-        String[] items = new String[]{"Latest","Oldest"};
+        String[] items = new String[]{"newest","oldest"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         sortOrderSpinner.setAdapter(adapter);
 
