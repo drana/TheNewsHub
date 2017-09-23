@@ -10,12 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
 import com.db.dipenrana.thenewshub.R;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,10 +36,14 @@ public class FilterFragment extends DialogFragment {
     @BindView(R.id.cbAutomobiles) CheckBox cbAutomobiles;
     @BindView(R.id.cbFashionBox) CheckBox cbFashion;
     @BindView(R.id.cbBusiness) CheckBox cbBusines;
-    @BindView(R.id.selectedDate)DatePicker spinnerDateSelected;
-    @BindView(R.id.sortOrder)Spinner sortOrder;
+    @BindView(R.id.selectedDate)DatePicker dateSelected;
+    @BindView(R.id.sortOrder)Spinner sortOrderSpinner;
     @BindView(R.id.btnSave) Button btnSaveClick;
     @BindView(R.id.btnCancel) Button btnCancelClick;
+
+    String selectedDate;
+    List<String> cbNewsSection = new ArrayList<String>();
+    String sortSelection;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -53,7 +63,7 @@ public class FilterFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_filter,container,false);
         ButterKnife.bind(this,view);
 
-
+        //setup btn click listner
         View.OnClickListener btnClicklistner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +83,13 @@ public class FilterFragment extends DialogFragment {
         btnSaveClick.setOnClickListener(btnClicklistner);
         btnCancelClick.setOnClickListener(btnClicklistner);
 
+        //setup spinner.
+        String[] items = new String[]{"Oldest", "Latest"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+        sortOrderSpinner.setAdapter(adapter);
+
+        //setup checkbox
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -84,8 +101,43 @@ public class FilterFragment extends DialogFragment {
 
 
     public void OnSave(){
+        selectedDate = getSelectedDate();
+        sortSelection = sortOrderSpinner.getSelectedItem().toString();
+        cbNewsSection = getSubSections();
         Log.d("btn","save clicked");
 
+    }
+
+    private List<String> getSubSections() {
+
+        if(cbArts.isChecked())
+            cbNewsSection.add("Arts");
+        if(cbAutomobiles.isChecked())
+            cbNewsSection.add("Automobiles");
+        if(cbBusines.isChecked())
+            cbNewsSection.add("Business");
+        if(cbFashion.isChecked())
+            cbNewsSection.add("Fashion");
+        if (cbSports.isChecked())
+            cbNewsSection.add("Sports");
+
+        return cbNewsSection;
+
+    }
+
+    private String getSelectedDate() {
+        int month = dateSelected.getMonth();
+        int day = dateSelected.getDayOfMonth();
+        int year = dateSelected.getYear();
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        SimpleDateFormat sdfformat = new SimpleDateFormat("MM-dd-yyyy");
+        String dueDateSelected = sdfformat.format(calendar.getTime());
+
+        return  dueDateSelected;
     }
 
 
@@ -93,11 +145,4 @@ public class FilterFragment extends DialogFragment {
         Log.d("btn","cancel clicked");
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-
-        return super.onCreateDialog(savedInstanceState);
-    }
 }
