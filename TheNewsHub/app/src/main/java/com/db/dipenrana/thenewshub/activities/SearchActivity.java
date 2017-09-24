@@ -98,7 +98,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         //on an article click event
         SetupListViewCLickListener();
 
-        //Setup scrolllistner
+        //Setup scrolllistener
         SetupScrollListener();
 
         try {
@@ -298,6 +298,14 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     @Override
     public void onApplyArticleFilters(ArticleFilter articleFilter){
         appliedFilters = articleFilter;
+        netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
+        try{
+        ResetLayout();
+        searchQuery = "TOP_STORY";
+        FetchNewArticles(searchQuery, 0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     Log.d("filters",articleFilter.getSelectedDate());
     }
 

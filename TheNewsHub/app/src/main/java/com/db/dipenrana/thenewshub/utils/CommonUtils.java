@@ -38,19 +38,17 @@ public class CommonUtils {
 
     public static String[] SORT_ORDER = new String[]{"","newest","oldest"};
 
+
+
     //build url for search query
     public static String getQueryURL(String query,int page,ArticleFilter newsFilter){
 
-        if(query.equals("TOP_STORY")){
-            HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
-            urlBuilder.addQueryParameter("api-key",CommonUtils.NYT_API_KEY);
-            return (urlBuilder.build().toString());
-        }
-        else {
             //build url with params
             HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
             urlBuilder.addQueryParameter("api-key",CommonUtils.NYT_API_KEY);
-            urlBuilder.addQueryParameter("q", query);
+            if(!query.equals("TOP_STORY")) {
+                urlBuilder.addQueryParameter("q", query);
+            }
             //check if filter applied
             if(newsFilter != null){
                 //sort order
@@ -84,12 +82,9 @@ public class CommonUtils {
             }
             Log.d("QueryURL",urlBuilder.build().toString());
             return (urlBuilder.build().toString());
-        }
-
 
 
     }
-
 
     public static int getNewsDeskColor(Context mContext,String newDesk) {
         int bkColor = getRandomColor();

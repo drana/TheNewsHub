@@ -150,9 +150,10 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
         sortSelection = sortOrderSpinner.getSelectedItem().toString();
         cbNewsSection = getSubSections();
         articleFilters = new ArticleFilter(selectedDate,sortSelection,cbNewsSection);
+        dismiss();
         FiltersDialogListener mListener = (FiltersDialogListener) getActivity();
         mListener.onApplyArticleFilters(articleFilters);
-        dismiss();
+
         Log.d("btn","save clicked");
     }
 
