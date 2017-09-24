@@ -17,6 +17,7 @@
             android:layout_margin="@dimen/tv_margin"
             android:textColor="@color/primary_text_black"
             android:text="Begin Date"
+            android:textStyle="bold"
             />
 
         <EditText
@@ -24,13 +25,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="YYY-MM-DD"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
             android:inputType="date"
             />
 
         <ImageButton
             android:id="@+id/btnDatePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:layout_margin="@dimen/tv_margin"
             android:src="@drawable/ic_date_range"
             android:scaleType="centerCrop"
@@ -38,14 +41,25 @@
             android:layout_gravity="center"/>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:layout_margin="5dp"
+        android:layout_below="@id/llDateSelection"/>
+
     <TextView
         android:id="@+id/llSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/llDateSelection"
-        android:layout_margin="@dimen/tv_margin"
+        android:layout_marginEnd="@dimen/tv_margin"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/tv_margin"
+        android:layout_marginStart="@dimen/tv_margin"
         android:textColor="@color/primary_text_black"
         android:text="Sort"
+        android:textStyle="bold"
         />
 
     <Spinner
@@ -53,21 +67,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/llDateSelection"
-        android:layout_toEndOf="@id/llSortOrder"
-        android:layout_margin="@dimen/tv_margin"
+        android:layout_toRightOf="@id/llSortOrder"
+        android:layout_alignBaseline="@id/llSortOrder"
+        android:layout_marginEnd="@dimen/tv_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="@dimen/tv_margin"
+        android:layout_marginStart="30dp"
         style="?android:attr/spinnerDropDownItemStyle"/>
+
+    <View
+        android:id="@+id/ddSortSub"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:layout_margin="5dp"
+        android:layout_below="@id/sortOrder"/>
 
     <TextView
         android:id="@+id/tvNewsSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llSortOrder"
+        android:layout_below="@id/ddSortSub"
         android:layout_marginBottom="@dimen/tv_margin"
         android:layout_marginLeft="@dimen/tv_margin"
         android:layout_marginRight="@dimen/tv_margin"
         android:layout_marginTop="@dimen/imgviewMargin"
         android:textColor="@color/primary_text_black"
         android:text="SubSection"
+        android:textStyle="bold"
         />
     <CheckBox
         android:id="@+id/cbSportsBox"

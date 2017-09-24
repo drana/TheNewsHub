@@ -134,7 +134,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                     netWorkAvailable = CommonUtils.isNetworkAvailable(getApplicationContext());
                     if(netWorkAvailable){
                     FetchNewArticles(query,0);
-                    }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(SearchActivity.this, "Network Unavailable Please try again!", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,6 +143,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                 searchView.clearFocus();
                 return true;
             }
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -220,7 +221,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
             netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
             if(netWorkAvailable) {
                 FetchNewArticles(searchQuery, page);
-            }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(SearchActivity.this, "Network Unavailable Please try again!", Toast.LENGTH_SHORT).show();
             Log.d("Pages added",Integer.toString(page));
         }
         else
@@ -309,7 +310,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         searchQuery = filterQuery;
         if(netWorkAvailable) {
             FetchNewArticles(searchQuery, 0);
-        }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
+        }else Toast.makeText(SearchActivity.this, "Network Unavailable Please try again!", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             e.printStackTrace();
         }

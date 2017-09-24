@@ -36,7 +36,7 @@ public class CommonUtils {
 
     public static final String NEWSDESK = "news_desk:(";
 
-    public static String[] SORT_ORDER = new String[]{"","newest","oldest"};
+    public static String[] SORT_ORDER = new String[]{"Relevance","newest","oldest"};
 
 
 
@@ -53,7 +53,7 @@ public class CommonUtils {
             if(newsFilter != null){
                 //sort order
                 String sortOrder = newsFilter.getSortSelection().toString();
-                if(!sortOrder.isEmpty()){
+                if(!sortOrder.isEmpty() && !sortOrder.equals("Relevance")){
                     urlBuilder.addQueryParameter("sort",sortOrder);
                 }
 
