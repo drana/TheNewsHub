@@ -2,6 +2,8 @@ package com.db.dipenrana.thenewshub.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +42,7 @@ public class CommonUtils {
     public static String getQueryURL(String query,int page,ArticleFilter newsFilter){
 
         if(query.equals("TOP_STORY")){
-            HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.HOME_API_URL).newBuilder();
+            HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
             urlBuilder.addQueryParameter("api-key",CommonUtils.NYT_API_KEY);
             return (urlBuilder.build().toString());
         }
@@ -137,7 +139,9 @@ public class CommonUtils {
             case "U.S.":
                 bkColor = ContextCompat.getColor(mContext, R.color.accent);
                 break;
-
+            case "None":
+                bkColor = ContextCompat.getColor(mContext, R.color.primary_dark);
+                break;
 
 
 
@@ -148,5 +152,11 @@ public class CommonUtils {
     public static int getRandomColor(){
         Random rnd = new Random();
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
+
+    public static Boolean isNetworkAvailable(Context mContext) {
+        ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

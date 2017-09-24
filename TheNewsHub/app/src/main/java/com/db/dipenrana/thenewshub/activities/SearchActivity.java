@@ -68,6 +68,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     int articleOffset;
     // Article filter
     ArticleFilter appliedFilters;
+    Boolean netWorkAvailable = false;
 //endregion
 
     @Override
@@ -103,8 +104,8 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         try {
             searchQuery = "TOP_STORY";
 
-            //FetchNewArticles(searchQuery,0);
-            //FetchTopStories();
+            FetchNewArticles(searchQuery,0);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,6 +131,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                     ResetLayout();
                     searchQuery = query;
                     //first query should have page 0
+                    netWorkAvailable = CommonUtils.isNetworkAvailable(getApplicationContext());
                     FetchNewArticles(query,0);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -213,6 +215,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
         if(articleOffset<articleHits) {
+            netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
             FetchNewArticles(searchQuery, page);
             Log.d("Pages added",Integer.toString(page));
         }
@@ -271,78 +274,6 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         Log.d("Connect", "Got response from NYT");
 
-    }
-
-    private void FetchTopStories(){
-
-        queryURL = CommonUtils.getQueryURL("TOP_STORY",0,appliedFilters);
-
-        // setup network client for search requests
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(queryURL)
-                .build();
-
-        // Get a handler that can be used to post to the main thread
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                Log.d("response","Got response");
-                JSONObject jsonResponse = null;
-
-
-                try {
-                    jsonResponse = new JSONObject(response.body().string());
-                    JSONArray resultsArray = jsonResponse.getJSONArray("results");
-                    topStories.addAll(TopStories.parseJsonTopStories(resultsArray.toString()));
-                    articles =  MapTopStoriesToArticles(topStories);
-                    SearchActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            articleRecyclerViewAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    Log.d("response","notify articles dataset changed");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("response","Failed to get array list of articles");
-                }
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                }
-            }
-        });
-
-    }
-
-    private ArrayList<Article> MapTopStoriesToArticles(ArrayList<TopStories> topStories) {
-
-        ArrayList<Article> tsArticles = new ArrayList<Article>();
-
-        for(int i =0;i<topStories.size();i++){
-
-            Article tsArticle = new Article();
-            Article.Headline tsHeadline = null;
-            Article.Multimedium tsMultimedium = null;
-
-
-
-            tsHeadline.setMain(topStories.get(i).getTitle());
-            tsArticle.setHeadline(tsHeadline);
-            tsArticle.setNewDesk(topStories.get(i).getSection());
-            tsArticle.setSnippet(topStories.get(i).getAbstract());
-            if(topStories.get(0).getMultimedia().size()  >0) {
-                tsMultimedium.setUrl(topStories.get(0).getMultimedia().get(0).getUrl());
-            }
-            tsArticles.add(tsArticle);
-        }
-
-        return tsArticles;
     }
 
     //clear layout before another search
