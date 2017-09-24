@@ -2,6 +2,7 @@ package com.db.dipenrana.thenewshub.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -146,10 +147,15 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 .into(ivArticleImage);
 
         tvTitle.setText(article.getHeadline().getMain());
+//        Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
+//        tvTitle.setTypeface(font);
+
         tvNewsDesk.setText(article.getNewDesk());
         tvSnippet.setText(article.getSnippet());
+//        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
+//        tvSnippet.setTypeface(font);
+//        tvSnippet.setTypeface(font);
         int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
-//        int backgroundColor = ContextCompat.getColor(mContext, R.color.primary_dark);
         tvNewsDesk.setBackgroundColor(backgroundColor);
 
     }

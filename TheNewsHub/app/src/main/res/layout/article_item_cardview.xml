@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -28,25 +29,39 @@
         android:layout_gravity="center_horizontal|center_vertical"/>
 
         <TextView
-        android:id="@+id/tvArticleTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="TextView" />
+            android:id="@+id/tvArticleTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/imgviewMargin"
+            android:fontFamily="sans-serif"
+            android:text="TextView"
+            android:textColor="@color/primary_text_black"
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold" />
 
         <TextView
-        android:id="@+id/tvNewsDesk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="TextView" />
+            android:id="@+id/tvNewsDesk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/imgviewMargin"
+            android:fontFamily="sans-serif"
+            android:text="TextView"
+            android:textSize="12sp"
+            android:textColor="@color/primary_text_black" />
 
         <TextView
-        android:id="@+id/tvArticleSnippet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_marginTop="16dp" />
+            android:id="@+id/tvArticleSnippet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/imgviewMargin"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:maxLines="4"
+            android:text="TextView"
+            android:textSize="12sp"
+            android:textColor="@color/primary_text_black"
+            android:textStyle="normal"
+            tools:fontFamily="sans-serif" />
 
     </LinearLayout>
 
