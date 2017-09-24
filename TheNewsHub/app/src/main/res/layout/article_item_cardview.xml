@@ -24,15 +24,14 @@
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:src="@drawable/placeholder"
-        android:layout_marginLeft="@dimen/imgviewMargin"
-        android:layout_marginRight="@dimen/imgviewMargin"
+
         android:layout_gravity="center_horizontal|center_vertical"/>
 
         <TextView
             android:id="@+id/tvArticleTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/imgviewMargin"
+            android:layout_margin="@dimen/imgviewMargin"
             android:fontFamily="sans-serif"
             android:text="TextView"
             android:textColor="@color/primary_text_black"
@@ -43,7 +42,7 @@
             android:id="@+id/tvNewsDesk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/imgviewMargin"
+            android:layout_margin="@dimen/imgviewMargin"
             android:fontFamily="sans-serif"
             android:text="TextView"
             android:textSize="12sp"
@@ -53,13 +52,13 @@
             android:id="@+id/tvArticleSnippet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/imgviewMargin"
+            android:layout_margin="@dimen/imgviewMargin"
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:maxLines="4"
             android:text="TextView"
             android:textSize="12sp"
-            android:textColor="@color/primary_text_black"
+            android:textColor="@color/secondary_text"
             android:textStyle="normal"
             tools:fontFamily="sans-serif" />
 

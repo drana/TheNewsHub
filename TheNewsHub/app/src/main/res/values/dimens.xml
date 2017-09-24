@@ -6,4 +6,5 @@
     <dimen name="imgviewMargin">5dp</dimen>
     <dimen name="rlMArgin">10dp</dimen>
     <dimen name="title_text_size">15sp</dimen>
+    <dimen name="tv_margin">3dp</dimen>
 </resources>

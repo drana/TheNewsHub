@@ -14,6 +14,8 @@
             android:id="@+id/tvBeginDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tv_margin"
+            android:textColor="@color/primary_text_black"
             android:text="Begin Date"
             />
 
@@ -21,7 +23,7 @@
             android:id="@+id/etBeginDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="enter dateYYYMMDD"
+            android:hint="YYY-MM-DD"
             android:inputType="date"
             />
 
@@ -29,34 +31,20 @@
             android:id="@+id/btnDatePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/etBeginDate"
+            android:layout_margin="@dimen/tv_margin"
             android:src="@drawable/ic_date_range"
             android:scaleType="centerCrop"
             android:background="@null"
             android:layout_gravity="center"/>
     </LinearLayout>
 
-
-
-
-    <!--<DatePicker-->
-        <!--android:id="@+id/selectedDate"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/llDateSelection"-->
-        <!--android:calendarViewShown="false"-->
-        <!--android:datePickerMode="spinner"-->
-        <!--android:spinnersShown="true"-->
-        <!--android:padding="0dp"-->
-        <!--android:scaleX="0.9"-->
-        <!--android:scaleY="0.9" />-->
-
     <TextView
         android:id="@+id/llSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/llDateSelection"
-        android:layout_marginTop="5dp"
+        android:layout_margin="@dimen/tv_margin"
+        android:textColor="@color/primary_text_black"
         android:text="Sort"
         />
 
@@ -65,15 +53,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/llDateSelection"
-        android:layout_toRightOf="@id/llSortOrder"
-        android:layout_weight="1"/>
+        android:layout_toEndOf="@id/llSortOrder"
+        android:layout_margin="@dimen/tv_margin"
+        style="?android:attr/spinnerDropDownItemStyle"/>
 
     <TextView
         android:id="@+id/tvNewsSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/llSortOrder"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="@dimen/tv_margin"
+        android:layout_marginLeft="@dimen/tv_margin"
+        android:layout_marginRight="@dimen/tv_margin"
+        android:layout_marginTop="@dimen/imgviewMargin"
+        android:textColor="@color/primary_text_black"
         android:text="SubSection"
         />
     <CheckBox
@@ -122,8 +115,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#343A44"
+        android:layout_height="1dp"
+        android:background="@color/divider"
         android:layout_margin="5dp"
         android:id="@+id/viewLineNote"
         android:layout_below="@id/cbPolitics"/>
@@ -144,11 +137,11 @@
             android:text="Apply"/>
 
         <View
-            android:layout_width="2dp"
+            android:layout_width="1dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="2dp"
             android:layout_height="match_parent"
-            android:background="#343A44"
+            android:background="@color/divider"
             />
 
         <Button
