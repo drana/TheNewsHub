@@ -146,17 +146,28 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 .transform(new RoundedCornersTransformation(10, 10))
                 .into(ivArticleImage);
 
+        String imageTitile = article.getHeadline().getMain();
+        String imageNewDesk = article.getNewDesk();
+        String imageSnippet = article.getSnippet();
+
         tvTitle.setText(article.getHeadline().getMain());
 //        Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
 //        tvTitle.setTypeface(font);
 
-        tvNewsDesk.setText(article.getNewDesk());
-        tvSnippet.setText(article.getSnippet());
+        if(imageNewDesk!=null && !imageNewDesk.isEmpty()) {
+            tvNewsDesk.setText(article.getNewDesk());
+            int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
+            tvNewsDesk.setBackgroundColor(backgroundColor);
+        }
+        else tvNewsDesk.setText("");
+
+        if(imageSnippet !=null && !imageSnippet.isEmpty()) {
+            tvSnippet.setText(article.getSnippet());
+        }
+        else tvSnippet.setText("");
 //        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
 //        tvSnippet.setTypeface(font);
 //        tvSnippet.setTypeface(font);
-        int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
-        tvNewsDesk.setBackgroundColor(backgroundColor);
 
     }
 
@@ -169,9 +180,22 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView tvNewsDesk = holder.getTvNewsDesk();
         TextView tvSnippet = holder.getTvArticleSnippet();
 
+        String noImageTitile = article.getHeadline().getMain();
+        String noImageNewDesk = article.getNewDesk();
+        String noImageSnippet = article.getSnippet();
+
+
         tvTitle.setText(article.getHeadline().getMain());
-        tvNewsDesk.setText(article.getNewDesk());
-        tvSnippet.setText(article.getSnippet());
+        if(noImageNewDesk!=null && !noImageNewDesk.isEmpty()) {
+            tvNewsDesk.setText(noImageNewDesk);
+            int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
+            tvNewsDesk.setBackgroundColor(backgroundColor);
+        }
+        else tvNewsDesk.setText("");
+        if(noImageSnippet!=null && !noImageSnippet.isEmpty()) {
+            tvSnippet.setText(article.getSnippet());
+        }
+        else tvSnippet.setText("");
 
     }
 
