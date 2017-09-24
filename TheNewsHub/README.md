@@ -20,7 +20,7 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-* [] Implements robust error handling, [check if internet is available](http://guides.codepath.com/android/Sending-and-Managing-Network-Requests#checking-for-network-connectivity), handle error cases, network failures
+* [x] Implements robust error handling, [check if internet is available](http://guides.codepath.com/android/Sending-and-Managing-Network-Requests#checking-for-network-connectivity), handle error cases, network failures
 * [X] Used the **ActionBar SearchView** or custom layout as the query box instead of an EditText
 * [ ] User can **share an article link** to their friends or email it to themselves
 * [x] Replaced Filter Settings Activity with a lightweight modal overlay
@@ -40,7 +40,9 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Use ButterKnife library.
+* [x] Use OkHttp instead of retrofit for all network request
+* [x] Added Home Page with top story search query. 
 
 ## Video Walkthrough
 

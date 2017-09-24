@@ -132,7 +132,9 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                     searchQuery = query;
                     //first query should have page 0
                     netWorkAvailable = CommonUtils.isNetworkAvailable(getApplicationContext());
+                    if(netWorkAvailable){
                     FetchNewArticles(query,0);
+                    }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -216,7 +218,9 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
         if(articleOffset<articleHits) {
             netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
-            FetchNewArticles(searchQuery, page);
+            if(netWorkAvailable) {
+                FetchNewArticles(searchQuery, page);
+            }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
             Log.d("Pages added",Integer.toString(page));
         }
         else
@@ -299,10 +303,13 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     public void onApplyArticleFilters(ArticleFilter articleFilter){
         appliedFilters = articleFilter;
         netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
+        String filterQuery = searchQuery;
         try{
         ResetLayout();
-        searchQuery = "TOP_STORY";
-        FetchNewArticles(searchQuery, 0);
+        searchQuery = filterQuery;
+        if(netWorkAvailable) {
+            FetchNewArticles(searchQuery, 0);
+        }else Toast.makeText(SearchActivity.this, "Network Unavailable Pease try again!", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             e.printStackTrace();
         }
