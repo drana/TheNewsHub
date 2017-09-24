@@ -1,8 +1,6 @@
 package com.db.dipenrana.thenewshub.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.activities.ArticleItemCardView;
 import com.db.dipenrana.thenewshub.activities.ArticleItemNoImageCardView;
-import com.db.dipenrana.thenewshub.models.Article;
+import com.db.dipenrana.thenewshub.models.TopStories;
 import com.db.dipenrana.thenewshub.utils.CommonUtils;
 import com.squareup.picasso.Picasso;
 
@@ -23,20 +21,19 @@ import java.util.ArrayList;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
- * Created by dipenrana on 9/20/17.
+ * Created by dipenrana on 9/23/17.
  */
 
-public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class TopStoriesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //store context and articles.
-    ArrayList<Article> mArticles = new ArrayList<Article>();
+    ArrayList<TopStories> mArticles = new ArrayList<TopStories>();
     Context mContext;
 
     private final int Image = 0, NoImage = 1;
 
 
     //constructor
-    public ArticleRecyclerViewAdapter(Context context, ArrayList<Article> articles) {
+    public TopStoriesRecyclerViewAdapter(Context context, ArrayList<TopStories> articles) {
         mArticles = articles;
         mContext = context;
     }
@@ -49,7 +46,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         switch (viewType) {
             case Image:
-                //View vPoster = inflater.inflate(R.layout.article_item_with_image, parent, false);
                 View vPoster = inflater.inflate(R.layout.article_item_cardview, parent, false);
                 viewHolder = new ArticleItemCardView(vPoster);
                 break;
@@ -94,8 +90,8 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemViewType(int position) {
         // decide which which view to use
-        Article item = mArticles.get(position);
-        ArrayList<Article.Multimedium> itemImageURLs = new ArrayList<Article.Multimedium>();
+        TopStories item = mArticles.get(position);
+        ArrayList<TopStories.Multimedium> itemImageURLs = new ArrayList<TopStories.Multimedium>();
         if(item.getMultimedia().size() > 0)
         {
             Log.d("getItemViewType","returned Image");
@@ -106,27 +102,12 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return NoImage;
         }
 
-        //itemImageURLs.addAll(item.getMultimedia());
-
-//        if(itemImageURLs.size()>0)
-//        {
-//            //Article.Multimedium itemURL = itemImageURLs.get(0);
-//            Log.d("getItemViewType","returned Image");
-//            return Image;
-//        }
-//        else if(itemImageURLs.isEmpty()){
-//            Log.d("getItemViewType","returned NoImage");
-//            return NoImage;
-//
-//        }
- //       return -1;
-
     }
 
 
     private void BindItemWithImage(ArticleItemCardView holder, int position)  {
         // Get the data model based on position
-        Article article = mArticles.get(position);
+        TopStories article = mArticles.get(position);
         TextView tvTitle = holder.getTvArticleTitile();
         TextView tvNewsDesk = holder.getTvNewsDesk();
         TextView tvSnippet = holder.getTvArticleSnippet();
@@ -145,27 +126,23 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 .transform(new RoundedCornersTransformation(10, 10))
                 .into(ivArticleImage);
 
-        tvTitle.setText(article.getHeadline().getMain());
-        tvNewsDesk.setText(article.getNewDesk());
-        tvSnippet.setText(article.getSnippet());
-        int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
-//        int backgroundColor = ContextCompat.getColor(mContext, R.color.primary_dark);
-        tvNewsDesk.setBackgroundColor(backgroundColor);
-
+        tvTitle.setText(article.getTitle());
+        tvNewsDesk.setText(article.getSection());
+        tvSnippet.setText(article.getAbstract());
     }
 
 
     private void BindItemWithNoImage(ArticleItemNoImageCardView holder, int position) {
 
         // Get the data model based on position
-        Article article = mArticles.get(position);
+        TopStories article = mArticles.get(position);
         TextView tvTitle = holder.getTvArticleTitile();
         TextView tvNewsDesk = holder.getTvNewsDesk();
         TextView tvSnippet = holder.getTvArticleSnippet();
 
-        tvTitle.setText(article.getHeadline().getMain());
-        tvNewsDesk.setText(article.getNewDesk());
-        tvSnippet.setText(article.getSnippet());
+        tvTitle.setText(article.getTitle());
+        tvNewsDesk.setText(article.getSection());
+        tvSnippet.setText(article.getAbstract());
 
     }
 

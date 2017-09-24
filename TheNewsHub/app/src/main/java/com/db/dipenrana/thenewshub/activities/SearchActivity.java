@@ -1,6 +1,5 @@
 package com.db.dipenrana.thenewshub.activities;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +19,11 @@ import android.widget.Toast;
 
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
+import com.db.dipenrana.thenewshub.adapters.TopStoriesRecyclerViewAdapter;
 import com.db.dipenrana.thenewshub.fragments.FilterFragment;
 import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.models.ArticleFilter;
+import com.db.dipenrana.thenewshub.models.TopStories;
 import com.db.dipenrana.thenewshub.utils.EndlessRecyclerViewScrollListener;
 import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
 import com.db.dipenrana.thenewshub.utils.CommonUtils;
@@ -37,24 +38,27 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity implements FilterFragment.FiltersDialogListener {
 
-    @BindView(R.id.rvResults) RecyclerView rvQueryResults;
+    //region define variables
+
+    @BindView(R.id.rvResults) RecyclerView rvArticleItems;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
+    ArrayList<TopStories> topStories = new ArrayList<TopStories>();
     String queryURL;
     String searchQuery;
 
     //define adapter and recycle view
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
-    RecyclerView rvArticleItems;
+    //TopStoriesRecyclerViewAdapter topStoryRecyclerViewAdapter;
+    //RecyclerView rvArticleItems;
     MenuItem searchItem;
     SearchView searchView;
     EndlessRecyclerViewScrollListener scrollListener;
@@ -64,7 +68,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     int articleOffset;
     // Article filter
     ArticleFilter appliedFilters;
-
+//endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +82,16 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         //instance of adapter
         articleRecyclerViewAdapter = new ArticleRecyclerViewAdapter(this,articles);
-        rvArticleItems = findViewById(R.id.rvResults);
+        //topStoryRecyclerViewAdapter = new TopStoriesRecyclerViewAdapter(this,topStories);
+        //rvArticleItems = findViewById(R.id.rvResults);
         rvArticleItems.setHasFixedSize(true);
 
         //attach adapter to view
         rvArticleItems.setAdapter(articleRecyclerViewAdapter);
 
+
         //setup staggeredGridLayout
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         rvArticleItems.setLayoutManager(staggeredGridLayoutManager);
 
         //on an article click event
@@ -93,6 +99,15 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         //Setup scrolllistner
         SetupScrollListener();
+
+        try {
+            searchQuery = "TOP_STORY";
+
+            //FetchNewArticles(searchQuery,0);
+            //FetchTopStories();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -258,6 +273,78 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
     }
 
+    private void FetchTopStories(){
+
+        queryURL = CommonUtils.getQueryURL("TOP_STORY",0,appliedFilters);
+
+        // setup network client for search requests
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(queryURL)
+                .build();
+
+        // Get a handler that can be used to post to the main thread
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                Log.d("response","Got response");
+                JSONObject jsonResponse = null;
+
+
+                try {
+                    jsonResponse = new JSONObject(response.body().string());
+                    JSONArray resultsArray = jsonResponse.getJSONArray("results");
+                    topStories.addAll(TopStories.parseJsonTopStories(resultsArray.toString()));
+                    articles =  MapTopStoriesToArticles(topStories);
+                    SearchActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            articleRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    Log.d("response","notify articles dataset changed");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("response","Failed to get array list of articles");
+                }
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+            }
+        });
+
+    }
+
+    private ArrayList<Article> MapTopStoriesToArticles(ArrayList<TopStories> topStories) {
+
+        ArrayList<Article> tsArticles = new ArrayList<Article>();
+
+        for(int i =0;i<topStories.size();i++){
+
+            Article tsArticle = new Article();
+            Article.Headline tsHeadline = null;
+            Article.Multimedium tsMultimedium = null;
+
+
+
+            tsHeadline.setMain(topStories.get(i).getTitle());
+            tsArticle.setHeadline(tsHeadline);
+            tsArticle.setNewDesk(topStories.get(i).getSection());
+            tsArticle.setSnippet(topStories.get(i).getAbstract());
+            if(topStories.get(0).getMultimedia().size()  >0) {
+                tsMultimedium.setUrl(topStories.get(0).getMultimedia().get(0).getUrl());
+            }
+            tsArticles.add(tsArticle);
+        }
+
+        return tsArticles;
+    }
+
     //clear layout before another search
     private void ResetLayout() {
         //clear search query
@@ -275,43 +362,6 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         InputMethodManager imm =(InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-    //build url for search query
-    public String getQueryURL(String query,int page,ArticleFilter newsFilter){
-
-        //build url with params
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(CommonUtils.API_URL).newBuilder();
-        urlBuilder.addQueryParameter("api-key",CommonUtils.NYT_API_KEY);
-        urlBuilder.addQueryParameter("q", query);
-        //check if filter applied
-        if(newsFilter != null){
-            //sort order
-            urlBuilder.addQueryParameter("sort",newsFilter.getSortSelection().toString());
-            //news section
-            int newsDesksSize = newsFilter.getCbNewsSection().size();
-            StringBuilder newsDeskBuilder = new StringBuilder();
-            if( newsDesksSize>0){
-                newsDeskBuilder.append(CommonUtils.NEWSDESK);
-                for(int i=0;i< newsDesksSize;i++){
-                    newsDeskBuilder.append(newsFilter.getCbNewsSection().get(i));
-                    newsDeskBuilder.append(CommonUtils.WHITESPACE);
-                }
-                newsDeskBuilder.append(")");
-                urlBuilder.addQueryParameter("fq",newsDeskBuilder.toString());
-            }
-            //date section
-            String dateBegin = newsFilter.getSelectedDate().toString().replaceAll("-","");
-            urlBuilder.addQueryParameter("begin_date",dateBegin);
-
-        }
-        if(page >0 && page<100)
-        {
-            urlBuilder.addQueryParameter("page",Integer.toString(page));
-        }
-        Log.d("QueryURL",urlBuilder.build().toString());
-        return (urlBuilder.build().toString());
-    }
-
 
     //get filter value back from filter fragment
     @Override

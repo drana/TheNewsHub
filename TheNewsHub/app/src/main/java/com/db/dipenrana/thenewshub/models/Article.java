@@ -89,6 +89,10 @@ public class Article implements Parcelable{
         uri = in.readString();
     }
 
+    public Article(){
+
+    }
+
     public static final Creator<Article> CREATOR = new Creator<Article>() {
         @Override
         public Article createFromParcel(Parcel in) {

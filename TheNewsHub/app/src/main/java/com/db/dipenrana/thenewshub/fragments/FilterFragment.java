@@ -1,15 +1,20 @@
 package com.db.dipenrana.thenewshub.fragments;
 
 
+import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +25,7 @@ import android.widget.Spinner;
 
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.models.ArticleFilter;
+import com.db.dipenrana.thenewshub.utils.CommonUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +46,7 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
     @BindView(R.id.cbAutomobiles) CheckBox cbAutomobiles;
     @BindView(R.id.cbFashionBox) CheckBox cbFashion;
     @BindView(R.id.cbBusiness) CheckBox cbBusines;
+    @BindView(R.id.cbPolitics)CheckBox cbPolitics;
     @BindView(R.id.etBeginDate)EditText etBeginDate;
     //@BindView(R.id.selectedDate)DatePicker dateSelected;
     @BindView(R.id.sortOrder)Spinner sortOrderSpinner;
@@ -52,7 +59,6 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
     List<String> cbNewsSection = new ArrayList<String>();
     String sortSelection;
     ArticleFilter articleFilters;
-    String beginDate;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -104,8 +110,8 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
         btnCancelClick.setOnClickListener(this);
         btnDatePicker.setOnClickListener(this);
         //setup spinner.
-        String[] items = new String[]{"newest","oldest"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, CommonUtils.SORT_ORDER);
         sortOrderSpinner.setAdapter(adapter);
 
 
@@ -128,7 +134,6 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
         }
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -141,7 +146,7 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
 
     //get filter values and store it in pojo
     public void OnApplyFilters(){
-        selectedDate =  etBeginDate.getText().toString();  //beginDate;
+        selectedDate =  etBeginDate.getText().toString();
         sortSelection = sortOrderSpinner.getSelectedItem().toString();
         cbNewsSection = getSubSections();
         articleFilters = new ArticleFilter(selectedDate,sortSelection,cbNewsSection);
@@ -163,6 +168,8 @@ public class FilterFragment extends DialogFragment implements View.OnClickListen
             cbNewsSection.add("Fashion");
         if (cbSports.isChecked())
             cbNewsSection.add("Sports");
+        if(cbPolitics.isChecked())
+            cbNewsSection.add("Politics");
 
         return cbNewsSection;
 

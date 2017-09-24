@@ -16,5 +16,22 @@
     <color name="divider">#BDBDBD</color>
     <color name="color_stroke">#757575</color>
     <color name="primary_White">#FFFFFF</color>
+    <color name="color_sports">#5c6bc0</color>
+    <color name="color_business">#4caf50</color>
+    <color name="color_fashion">#ec407a</color>
+    <color name="color_arts">#ff80ab</color>
+    <color name="color_politics">#00bcd4</color>
+    <color name="color_auto">#ff7043</color>
+    <color name="color_fields">#ff9e80</color>
+    <color name="color_food">#ffee58</color>
+    <color name="color_foreign">#558b2f</color>
+    <color name="color_media">#b71c1c</color>
+    <color name="color_health">#6a1b9a</color>
+    <color name="color_movies">#795548</color>
+    <color name="color_tech">#546e7a</color>
+    <color name="color_science">#283593</color>
+
+
+
 
 </resources>

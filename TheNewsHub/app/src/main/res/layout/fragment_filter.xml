@@ -112,6 +112,13 @@
         android:layout_below="@id/cbBusiness"
         android:layout_toRightOf="@id/tvNewsSection"
         android:text="Automobiles"/>
+    <CheckBox
+        android:id="@+id/cbPolitics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbAutomobiles"
+        android:layout_toRightOf="@id/tvNewsSection"
+        android:text="Politics"/>
 
     <View
         android:layout_width="match_parent"
@@ -119,12 +126,12 @@
         android:background="#343A44"
         android:layout_margin="5dp"
         android:id="@+id/viewLineNote"
-        android:layout_below="@id/cbAutomobiles"/>
+        android:layout_below="@id/cbPolitics"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cbAutomobiles"
+        android:layout_below="@id/cbPolitics"
         android:orientation="horizontal">
 
         <Button
