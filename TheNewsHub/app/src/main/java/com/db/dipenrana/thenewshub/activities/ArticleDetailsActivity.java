@@ -2,7 +2,9 @@ package com.db.dipenrana.thenewshub.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
@@ -85,6 +87,7 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         wvArticleDetails.getSettings().setUseWideViewPort(true);
         wvArticleDetails.loadUrl(webURL);
     }
+
 
     //manage url loading behaviour
     private class ArticleBrowser extends WebViewClient{

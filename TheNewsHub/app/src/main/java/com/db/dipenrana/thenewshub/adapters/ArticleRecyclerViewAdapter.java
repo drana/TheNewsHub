@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.activities.ArticleItemCardView;
 import com.db.dipenrana.thenewshub.activities.ArticleItemNoImageCardView;
@@ -136,15 +137,14 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         String imgURL = CommonUtils.IMAGE_URL_PREFIX + article.getMultimedia().get(0).getUrl();
 
-        Picasso.with(mContext)
+
+
+        Glide.with(mContext)
                 .load(imgURL)
-                .fit()
                 .centerCrop()
                 .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
-                .noFade()
-                .transform(new RoundedCornersTransformation(10, 10))
-                .into(ivArticleImage);
+                .error(R.drawable.placeholder).into(ivArticleImage);
+
 
         String imageTitile = article.getHeadline().getMain();
         String imageNewDesk = article.getNewDesk();
@@ -154,15 +154,15 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 //        Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
 //        tvTitle.setTypeface(font);
 
-        if(imageNewDesk!=null && !imageNewDesk.isEmpty()) {
-            tvNewsDesk.setText(article.getNewDesk());
+        if(imageNewDesk!=null && !imageNewDesk.isEmpty() && !imageNewDesk.equals("None")) {
+            tvNewsDesk.setText(imageNewDesk);
             int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
             tvNewsDesk.setBackgroundColor(backgroundColor);
         }
         else tvNewsDesk.setText("");
 
         if(imageSnippet !=null && !imageSnippet.isEmpty()) {
-            tvSnippet.setText(article.getSnippet());
+            tvSnippet.setText(imageSnippet);
         }
         else tvSnippet.setText("");
 //        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Raleway-Regular.ttf");
@@ -186,14 +186,14 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
         tvTitle.setText(article.getHeadline().getMain());
-        if(noImageNewDesk!=null && !noImageNewDesk.isEmpty()) {
+        if(noImageNewDesk!=null && !noImageNewDesk.isEmpty() && !noImageNewDesk.equals("None")) {
             tvNewsDesk.setText(noImageNewDesk);
             int backgroundColor = CommonUtils.getNewsDeskColor(mContext, article.getNewDesk());
             tvNewsDesk.setBackgroundColor(backgroundColor);
         }
         else tvNewsDesk.setText("");
         if(noImageSnippet!=null && !noImageSnippet.isEmpty()) {
-            tvSnippet.setText(article.getSnippet());
+            tvSnippet.setText(noImageSnippet);
         }
         else tvSnippet.setText("");
 

@@ -1,6 +1,7 @@
 package com.db.dipenrana.thenewshub.utils;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -135,8 +136,8 @@ public class CommonUtils {
             case "U.S.":
                 bkColor = ContextCompat.getColor(mContext, R.color.accent);
                 break;
-            case "None":
-                bkColor = ContextCompat.getColor(mContext, R.color.primary_dark);
+            case "Politics":
+                bkColor = ContextCompat.getColor(mContext, R.color.color_politics);
                 break;
 
 
@@ -166,5 +167,14 @@ public class CommonUtils {
         } catch (IOException e)          { e.printStackTrace(); }
         catch (InterruptedException e) { e.printStackTrace(); }
         return false;
+    }
+
+    public static boolean isPackageInstalled(String packagename, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packagename, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

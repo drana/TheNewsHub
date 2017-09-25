@@ -5,6 +5,7 @@ package com.db.dipenrana.thenewshub.utils;
  */
 
 public class unusedcode {
+
     //    //build url for search query
 //    public static String getQueryURL(String query,int page,ArticleFilter newsFilter){
 //
@@ -58,4 +59,21 @@ public class unusedcode {
 //        }
 //
 //    }
+
+
+    //        Picasso.with(mContext)
+//                .load(imgURL)
+//                .fit()
+//                .centerCrop()
+//                .placeholder(R.drawable.placeholder)
+//                .error(R.drawable.placeholder)
+//                .noFade()
+//                .transform(new RoundedCornersTransformation(10, 10))
+//                .into(ivArticleImage);
+
+    //                        Intent intent = new Intent(SearchActivity.this,ArticleDetailsActivity.class);
+//                        intent.putExtra("ARTICLE_WEB_URL", details.getWebUrl());
+//                        //intent.putExtra("Genres", (Parcelable) details.getGenreList());
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                        startActivity(intent);
 }

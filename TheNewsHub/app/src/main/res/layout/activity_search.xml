@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         app:titleTextColor="@color/primary_text_white"
         android:background="@color/primary_dark">
-        <!--android:background="?attr/colorPrimary">-->
     </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/content_search"/>

@@ -1,9 +1,19 @@
 package com.db.dipenrana.thenewshub.activities;
 
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -14,16 +24,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
-
 
 import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.adapters.ArticleRecyclerViewAdapter;
-import com.db.dipenrana.thenewshub.adapters.TopStoriesRecyclerViewAdapter;
 import com.db.dipenrana.thenewshub.fragments.FilterFragment;
 import com.db.dipenrana.thenewshub.models.Article;
 import com.db.dipenrana.thenewshub.models.ArticleFilter;
-import com.db.dipenrana.thenewshub.models.TopStories;
 import com.db.dipenrana.thenewshub.utils.EndlessRecyclerViewScrollListener;
 import com.db.dipenrana.thenewshub.utils.ItemClickSupport;
 import com.db.dipenrana.thenewshub.utils.CommonUtils;
@@ -51,13 +59,13 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
     //instance of model
     ArrayList<Article> articles = new ArrayList<Article>();
-    ArrayList<TopStories> topStories = new ArrayList<TopStories>();
+
     String queryURL;
     String searchQuery;
 
     //define adapter and recycle view
     ArticleRecyclerViewAdapter articleRecyclerViewAdapter;
-    //TopStoriesRecyclerViewAdapter topStoryRecyclerViewAdapter;
+
     //RecyclerView rvArticleItems;
     MenuItem searchItem;
     SearchView searchView;
@@ -83,7 +91,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         //instance of adapter
         articleRecyclerViewAdapter = new ArticleRecyclerViewAdapter(this,articles);
-        //topStoryRecyclerViewAdapter = new TopStoriesRecyclerViewAdapter(this,topStories);
+
         //rvArticleItems = findViewById(R.id.rvResults);
         rvArticleItems.setHasFixedSize(true);
 
@@ -122,8 +130,14 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         searchItem = menu.findItem(R.id.miSearch);
         searchView = (SearchView) searchItem.getActionView();
         hideSoftKeyboard(searchView);
+        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text_white));//getResources().getColor(R.color.primary_text_white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.primary_text_white));
+
+
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("enter keyword");
+
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -183,11 +197,20 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                         // do it
                         // first parameter is the context, second is the class of the activity to launch
                         Article details = articles.get(position);
+
+                        PackageManager pm = getApplicationContext().getPackageManager();
+                        boolean isInstalled = CommonUtils.isPackageInstalled("com.android.chrome", pm);
+                        //if chrome installed start chrome else use webview
+                        if(isInstalled) {
+                            SetupChromeWebView(details.getWebUrl());
+                        }
+                        else{
                         Intent intent = new Intent(SearchActivity.this,ArticleDetailsActivity.class);
                         intent.putExtra("ARTICLE_WEB_URL", details.getWebUrl());
-                        //intent.putExtra("Genres", (Parcelable) details.getGenreList());
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
+                        }
+
                     }
                 }
         );
@@ -321,5 +344,30 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         }
     Log.d("filters",articleFilter.getSelectedDate());
     }
+
+    private void SetupChromeWebView(String urlWeb){
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        // add share action to menu list
+        builder.setToolbarColor(getApplicationContext().getResources().getColor(R.color.primary_dark));
+        builder.addDefaultShareMenuItem();
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_share);
+        int requestCode = 100;
+        //Create a PendingIntent to your BroadCastReceiver implementation
+        Intent actionIntent = new Intent(
+                this.getApplicationContext(), SearchActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(getApplicationContext(), 0, actionIntent, 0);
+
+        //Set the pendingIntent as the action to be performed when the button is clicked.
+        builder.setActionButton(bitmap, "Toolbar", pendingIntent);
+
+
+// and launch the desired Url with CustomTabsIntent.launchUrl()
+        customTabsIntent.launchUrl(this, Uri.parse(urlWeb));
+    }
+
+
 
 }

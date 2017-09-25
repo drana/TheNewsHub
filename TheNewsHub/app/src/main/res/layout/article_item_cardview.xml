@@ -24,7 +24,7 @@
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:src="@drawable/placeholder"
-
+        android:layout_margin="@dimen/imgviewMargin"
         android:layout_gravity="center_horizontal|center_vertical"/>
 
         <TextView
