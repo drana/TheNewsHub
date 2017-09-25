@@ -49,7 +49,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/IgNCT0V.gif' title='Video Walkthrough' width='500' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/IgNCT0V.gif' title='TheNewsHub' width='500' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
