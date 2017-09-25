@@ -103,8 +103,9 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         try {
             searchQuery = "TOP_STORY";
-
-            FetchNewArticles(searchQuery,0);
+            if(netWorkAvailable) {
+                FetchNewArticles(searchQuery, 0);
+            }else Toast.makeText(SearchActivity.this, "Network Unavailable Please try again!", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             e.printStackTrace();

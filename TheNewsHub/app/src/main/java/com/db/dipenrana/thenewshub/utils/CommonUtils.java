@@ -13,6 +13,7 @@ import com.db.dipenrana.thenewshub.R;
 import com.db.dipenrana.thenewshub.activities.SearchActivity;
 import com.db.dipenrana.thenewshub.models.ArticleFilter;
 
+import java.io.IOException;
 import java.util.Random;
 
 import okhttp3.HttpUrl;
@@ -152,6 +153,18 @@ public class CommonUtils {
     public static Boolean isNetworkAvailable(Context mContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+        Boolean netCheck = isOnline();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting() && netCheck;
+    }
+
+    public static boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 }
