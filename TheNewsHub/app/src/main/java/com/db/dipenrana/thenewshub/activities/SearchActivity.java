@@ -103,6 +103,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
 
         try {
             searchQuery = "TOP_STORY";
+            netWorkAvailable =  CommonUtils.isNetworkAvailable(getApplicationContext());
             if(netWorkAvailable) {
                 FetchNewArticles(searchQuery, 0);
             }else Toast.makeText(SearchActivity.this, "Network Unavailable Please try again!", Toast.LENGTH_SHORT).show();
@@ -165,6 +166,9 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
             FragmentManager fm = getSupportFragmentManager();
             FilterFragment filterFragment = FilterFragment.newInstance();
             filterFragment.show(fm, "fragFilter");
+        }
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
         }
         return  true;
     }

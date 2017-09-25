@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarDetails"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/primary_text_white"
+        android:background="@color/primary_dark">
 
+    </android.support.v7.widget.Toolbar>
 
     <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@id/toolbarDetails"
         android:id="@+id/wvArticleDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
